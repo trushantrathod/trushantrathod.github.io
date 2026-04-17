@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trushant Rathod — Portfolio</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="#hero" class="nav-logo">TR</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#conference">Research</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <canvas class="bg-canvas" id="hero-canvas"></canvas>
+  <div class="section-content" style="width:100%;max-width:1100px;">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tag">Computer Engineer · Mumbai</div>
+        <h1 class="hero-name">Trushant<br><span>Rathod</span></h1>
+        <p class="hero-subtitle">Building ethical AI, decentralized systems,<br>and real-time web experiences.</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">800+</div>
+            <div class="stat-label">LeetCode Solved</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">Top 4%</div>
+            <div class="stat-label">Global Rank</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">7.77</div>
+            <div class="stat-label">CGPA</div>
+          </div>
+        </div>
+            <div class="hero-buttons">
+            
+            <div class="top-buttons">
+                <a href="#projects" class="hero-cta">View Work</a>
+                <a href="resume.pdf" class="hero-cta" target="_blank">Download Resume</a>
+            </div>
+
+            <a href="#contact" class="hero-cta-ghost center-btn">
+                Get in Touch
+            </a>
+
+            </div>
+      </div>
+      <div style="display:flex;justify-content:center;">
+        <div class="hero-photo-frame">
+          <img src="profile.jpg" alt="Trushant">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about">
+  <div class="section-content">
+    <div class="section-eyebrow reveal">Who I Am</div>
+    <h2 class="section-title reveal reveal-delay-1">Engineer &<br>Problem Solver</h2>
+    <div class="about-grid">
+      <div>
+        <p class="about-text reveal reveal-delay-2">
+          I'm a final-year Computer Engineering student at VCET, Mumbai — obsessed with the intersection of AI ethics, decentralized trust, and high-performance web systems. I think deeply about how software touches human lives and build accordingly.
+        </p>
+        <p class="about-text reveal reveal-delay-3" style="margin-top:1.2rem;">
+          From publishing research at an IEEE-co-sponsored international conference to achieving LeetCode Knight status, I bring the same intensity to every challenge.
+        </p>
+        <div class="achievements-row">
+          <div class="achievement-pill reveal reveal-delay-1">🏆 LeetCode Knight — 1976</div>
+          <div class="achievement-pill reveal reveal-delay-2">⭐ CodeChef 3-Star — 1652</div>
+          <div class="achievement-pill reveal reveal-delay-3">📄 IEEE Co-sponsored Research</div>
+        </div>
+      </div>
+      <div>
+        <div class="skills-grid">
+          <div class="skill-chip reveal reveal-delay-1">Python · TensorFlow</div>
+          <div class="skill-chip reveal reveal-delay-1">Solidity · Web3.js</div>
+          <div class="skill-chip reveal reveal-delay-2">React · FastAPI</div>
+          <div class="skill-chip reveal reveal-delay-2">Node.js · Express</div>
+          <div class="skill-chip reveal reveal-delay-3">MongoDB · Firebase</div>
+          <div class="skill-chip reveal reveal-delay-3">IPFS · Blockchain</div>
+          <div class="skill-chip reveal reveal-delay-4">DSA · C++ · OOP</div>
+          <div class="skill-chip reveal reveal-delay-4">TypeScript · Tailwind</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJECTS ══ -->
+<section id="projects">
+  <div class="section-content">
+    <div class="section-eyebrow reveal">Selected Work</div>
+    <h2 class="section-title reveal reveal-delay-1">Projects</h2>
+    <div class="projects-stack">
+
+      <!-- Project 1: Conscia AI -->
+      <div class="project-block reveal">
+        <div class="project-visual">
+          <canvas class="project-canvas" id="conscia-canvas"></canvas>
+          <div class="project-label">Neural Network · NLP</div>
+        </div>
+        <div>
+          <div class="project-num">01</div>
+          <h3 class="project-title">Conscia — Ethical Shopping AI</h3>
+          <p class="project-desc">
+            A neural network that classifies product reviews into ethical categories using TF-IDF and LIME interpretability. Built an end-to-end NLP pipeline with weighted sentiment scoring to generate ethical ratings at inference time.
+          </p>
+          <div class="project-tags">
+            <span class="tag">TensorFlow</span>
+            <span class="tag">Keras</span>
+            <span class="tag">LIME</span>
+            <span class="tag">NLP</span>
+            <span class="tag">Python</span>
+          </div>
+          <a href="https://github.com/trushantrathod/Conscia-Trained" class="project-link">View on GitHub</a>
+        </div>
+      </div>
+
+      <!-- Project 2: Blockchain -->
+      <div class="project-block reverse reveal">
+        <div class="project-visual">
+          <canvas class="project-canvas" id="blockchain-canvas"></canvas>
+          <div class="project-label">Ethereum · IPFS · Solidity</div>
+        </div>
+        <div>
+          <div class="project-num">02</div>
+          <h3 class="project-title">Blockchain Certificate Verification</h3>
+          <p class="project-desc">
+            Decentralized document verification using Ethereum smart contracts and IPFS. Tamper-proof hash storage on-chain, encrypted documents off-chain. Eliminates reliance on central authorities for credential validation.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Solidity</span>
+            <span class="tag">Ethereum</span>
+            <span class="tag">IPFS</span>
+            <span class="tag">Web3.js</span>
+            <span class="tag">Node.js</span>
+          </div>
+          <a href="https://github.com/trushantrathod/Certificate-Verification-using-Blockchain" class="project-link">View on GitHub</a>
+        </div>
+      </div>
+
+      <!-- Project 3: SocialDash -->
+      <div class="project-block reveal">
+        <div class="project-visual">
+          <canvas class="project-canvas" id="social-canvas"></canvas>
+          <div class="project-label">React · FastAPI · Real-Time</div>
+        </div>
+        <div>
+          <div class="project-num">03</div>
+          <h3 class="project-title">SocialDash — Analytics Platform</h3>
+          <p class="project-desc">
+            Real-time social media analytics with live growth metrics, session velocity tracking, and milestone-based progress. Delta-based backend updates, MongoDB persistence, and Firebase Auth with dynamic data visualization.
+          </p>
+          <div class="project-tags">
+            <span class="tag">React</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Firebase</span>
+            <span class="tag">Real-Time</span>
+          </div>
+          <a href="https://github.com/trushantrathod/SocialDash" class="project-link">View on GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONFERENCE ══ -->
+<section id="conference">
+  <canvas class="bg-canvas" id="conf-canvas"></canvas>
+  <div class="section-content">
+    <div class="section-eyebrow reveal">Research</div>
+    <h2 class="section-title reveal reveal-delay-1">Published Work</h2>
+    <div class="conf-card reveal reveal-delay-2">
+      <p class="conf-name">Conscia: An AI-Powered Ethical Shopping Companion</p>
+      <p class="conf-meta">International Conference on Communication, Computing & Emerging Technologies</p>
+      <p class="conf-meta" style="margin-top:0.4rem;">IC3ET 2026 · February 2026</p>
+      <div class="ieee-row">
+        <div class="ieee-badge">
+            IEEE Technically Co-Sponsored
+        </div>
+
+        <a href="IC3ET Certificate.pdf" class="cert-btn" target="_blank">
+            Download Certificate
+        </a>
+        </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE ══ -->
+<section id="experience">
+  <div class="section-content">
+    <div class="section-eyebrow reveal">Work History</div>
+    <h2 class="section-title reveal reveal-delay-1">Experience</h2>
+    <div class="exp-card reveal reveal-delay-2">
+      <div class="exp-role">Web Developer Intern</div>
+      <div class="exp-company">CodSoft</div>
+      <div class="exp-period">December 2023 – January 2024</div>
+      <ul class="exp-points">
+        <li>Developed responsive web interfaces using JavaScript, HTML, and CSS with cross-browser compatibility.</li>
+        <li>Implemented reusable UI components and structured layouts for consistency across multiple web pages.</li>
+        <li>Built interactive client-side features including form validation and dynamic elements to enhance usability.</li>
+        <li>Collaborated on debugging and testing cycles to improve application reliability under deadline pressure.</li>
+      </ul>
+    </div>
+    <div class="exp-card reveal reveal-delay-3">
+      <div class="exp-role">B.E in Computer Engineering</div>
+      <div class="exp-company">Vidyavardhini's College of Engineering and Technology · University of Mumbai</div>
+      <div class="exp-period">July 2022 – June 2026 · CGPA 7.77/10</div>
+      <ul class="exp-points">
+        <li>Core coursework in Data Structures, Algorithms, Operating Systems, and Computer Networks.</li>
+        <li>Active participant in competitive programming — LeetCode Knight, CodeChef 3-Star.</li>
+        <li>Presented original research at IEEE co-sponsored international conference in Feb 2026.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <canvas class="bg-canvas" id="contact-canvas"></canvas>
+  <div class="section-content">
+    <div class="contact-grid">
+      <div>
+        <div class="section-eyebrow reveal">Let's Talk</div>
+        <h2 class="contact-big reveal reveal-delay-1">Open to<br><span>new roles</span><br>& collabs.</h2>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:trushantrathod@gmail.com" class="contact-item reveal reveal-delay-1">
+          <div class="contact-icon">✉</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-val">trushantrathod@gmail.com</div>
+          </div>
+        </a>
+        <a href="tel:+917977071391" class="contact-item reveal reveal-delay-2">
+          <div class="contact-icon">☎</div>
+          <div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-val">+91 79770 71391</div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/trushant-rathod-b8705b256/" class="contact-item reveal reveal-delay-3">
+          <div class="contact-icon">in</div>
+          <div>
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-val">linkedin.com/in/trushantrathod</div>
+          </div>
+        </a>
+        <a href="https://github.com/trushantrathod" class="contact-item reveal reveal-delay-4">
+          <div class="contact-icon">⌥</div>
+          <div>
+            <div class="contact-label">GitHub</div>
+            <div class="contact-val">github.com/trushantrathod</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Trushant Rathod © 2026</span>
+  <span>Mumbai, Maharashtra</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
