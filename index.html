@@ -15,6 +15,15 @@
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
+<!-- Mobile menu overlay -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about">About</a>
+  <a href="#projects">Projects</a>
+  <a href="#conference">Research</a>
+  <a href="#experience">Experience</a>
+  <a href="#contact">Contact</a>
+</div>
+
 <!-- Nav -->
 <nav>
   <a href="#hero" class="nav-logo">TR</a>
@@ -25,6 +34,9 @@
     <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- ══ HERO ══ -->
@@ -50,18 +62,13 @@
             <div class="stat-label">CGPA</div>
           </div>
         </div>
-            <div class="hero-buttons">
-            
-            <div class="top-buttons">
-                <a href="#projects" class="hero-cta">View Work</a>
-                <a href="resume.pdf" class="hero-cta" target="_blank">Download Resume</a>
-            </div>
-
-            <a href="#contact" class="hero-cta-ghost center-btn">
-                Get in Touch
-            </a>
-
-            </div>
+        <div class="hero-buttons">
+          <div class="top-buttons">
+            <a href="#projects" class="hero-cta">View Work</a>
+            <a href="resume.pdf" class="hero-cta" target="_blank">Download Resume</a>
+          </div>
+          <a href="#contact" class="hero-cta-ghost center-btn">Get in Touch</a>
+        </div>
       </div>
       <div style="display:flex;justify-content:center;">
         <div class="hero-photo-frame">
@@ -196,17 +203,12 @@
     <h2 class="section-title reveal reveal-delay-1">Published Work</h2>
     <div class="conf-card reveal reveal-delay-2">
       <p class="conf-name">Conscia: An AI-Powered Ethical Shopping Companion</p>
-      <p class="conf-meta">International Conference on Communication, Computing & Emerging Technologies</p>
+      <p class="conf-meta">International Conference on Communication, Computing &amp; Emerging Technologies</p>
       <p class="conf-meta" style="margin-top:0.4rem;">IC3ET 2026 · February 2026</p>
       <div class="ieee-row">
-        <div class="ieee-badge">
-            IEEE Technically Co-Sponsored
-        </div>
-
-        <a href="IC3ET Certificate.pdf" class="cert-btn" target="_blank">
-            Download Certificate
-        </a>
-        </div>
+        <div class="ieee-badge">IEEE Technically Co-Sponsored</div>
+        <a href="IC3ET_Certificate.pdf" class="cert-btn" target="_blank">Download Certificate</a>
+      </div>
     </div>
   </div>
 </section>
@@ -247,7 +249,7 @@
     <div class="contact-grid">
       <div>
         <div class="section-eyebrow reveal">Let's Talk</div>
-        <h2 class="contact-big reveal reveal-delay-1">Open to<br><span>new roles</span><br>& collabs.</h2>
+        <h2 class="contact-big reveal reveal-delay-1">Open to<br><span>new roles</span><br>&amp; collabs.</h2>
       </div>
       <div class="contact-links">
         <a href="mailto:trushantrathod@gmail.com" class="contact-item reveal reveal-delay-1">
@@ -257,26 +259,18 @@
             <div class="contact-val">trushantrathod@gmail.com</div>
           </div>
         </a>
-        <a href="https://www.linkedin.com/in/trushant-rathod-b8705b256/" class="contact-item reveal reveal-delay-3">
+        <a href="https://www.linkedin.com/in/trushant-rathod-b8705b256/" class="contact-item reveal reveal-delay-2" target="_blank">
           <div class="contact-icon">in</div>
           <div>
             <div class="contact-label">LinkedIn</div>
             <div class="contact-val">linkedin.com/in/trushantrathod</div>
           </div>
         </a>
-        <a href="https://github.com/trushantrathod" class="contact-item reveal reveal-delay-4">
+        <a href="https://github.com/trushantrathod" class="contact-item reveal reveal-delay-3" target="_blank">
           <div class="contact-icon">⌥</div>
           <div>
             <div class="contact-label">GitHub</div>
             <div class="contact-val">github.com/trushantrathod</div>
-          </div>
-        </a>
-      </a>
-      <a href="mailto:trushantrathod@gmail.com" class="contact-item reveal reveal-delay-2">
-          <div class="contact-icon">✉</div>
-          <div>
-            <div class="contact-label">Contact</div>
-            <div class="contact-val">Via Email / LinkedIn</div>
           </div>
         </a>
       </div>
