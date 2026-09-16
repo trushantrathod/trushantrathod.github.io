@@ -1,351 +1,2475 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trushant Rathod - Portfolio</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#03040a"
+    >
+
+    <meta
+        name="description"
+        content="Trushant Rathod — Computer Engineer building AI systems, full-stack applications, real-time platforms and decentralized systems."
+    >
+
+    <title>
+        Trushant Rathod — Computer Engineer
+    </title>
+
+
+    <!-- Favicon -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="favicon.png"
+    >
+
+
+    <!-- Fonts -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- Libraries -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
+        defer
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        defer
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
+        defer
+    ></script>
+
+
+    <!-- Styles -->
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
 </head>
+
+
 <body>
 
-<!-- Cursor -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
 
-<!-- Mobile menu overlay -->
-<div class="mobile-menu" id="mobile-menu">
-  <a href="#about">About</a>
-  <a href="#projects">Projects</a>
-  <a href="#conference">Research</a>
-  <a href="#experience">Experience</a>
-  <a href="#contact">Contact</a>
-</div>
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
 
-<!-- Nav -->
-<nav>
-  <a href="#hero" class="nav-logo">TR</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#conference">Research</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
+<div
+    id="space-background"
+    aria-hidden="true"
+></div>
+
+<div
+    id="parallax-stars"
+    aria-hidden="true"
+></div>
+
+
+<div
+    id="cursor-light"
+    aria-hidden="true"
+></div>
+
+
+<div
+    class="space-overlay"
+    aria-hidden="true"
+></div>
+
+
+<div
+    class="noise"
+    aria-hidden="true"
+></div>
+
+
+<!-- =====================================================
+     CUSTOM CURSOR
+===================================================== -->
+
+<div
+    class="cursor"
+    id="cursor"
+    aria-hidden="true"
+></div>
+
+
+<div
+    class="cursor-ring"
+    id="cursorRing"
+    aria-hidden="true"
+></div>
+
+
+<!-- =====================================================
+     TOP NAVIGATION
+===================================================== -->
+
+<nav id="topNav">
+
+    <div class="container nav-container">
+
+
+        <a
+            href="#home"
+            class="logo"
+            aria-label="Trushant Rathod home"
+        >
+
+            <span class="logo-mark">
+                TR
+            </span>
+
+
+            <span class="logo-text">
+
+                <span class="logo-name">
+                    TRUSHANT RATHOD
+                </span>
+
+                <span class="logo-role">
+                    COMPUTER ENGINEER
+                </span>
+
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a
+                href="#about"
+                data-section-link="about"
+            >
+                About
+            </a>
+
+            <a
+                href="#projects"
+                data-section-link="projects"
+            >
+                Projects
+            </a>
+
+            <a
+                href="#research"
+                data-section-link="research"
+            >
+                Research
+            </a>
+
+            <a
+                href="#experience"
+                data-section-link="experience"
+            >
+                Experience
+            </a>
+
+            <a
+                href="#contact"
+                data-section-link="contact"
+            >
+                Contact
+            </a>
+
+        </div>
+
+
+        <button
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            type="button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+        >
+
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
 </nav>
 
-<!-- ══ HERO ══ -->
-<section id="hero">
-  <canvas class="bg-canvas" id="hero-canvas"></canvas>
-  <div class="section-content" style="width:100%;max-width:1100px;">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-tag">Computer Engineer · Mumbai</div>
-        <h1 class="hero-name">Trushant<br><span>Rathod</span></h1>
-        <p class="hero-subtitle">Building high-performance web applications, real-time systems, and data-driven solutions.</p>
-        <div class="hero-stats">
-          <div class="stat-item">
-            <div class="stat-num">800+</div>
-            <div class="stat-label">LeetCode Solved</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">Top 5%</div>
-            <div class="stat-label">Leetcode Global</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">7.77</div>
-            <div class="stat-label">CGPA</div>
-          </div>
+
+<!-- =====================================================
+     MOBILE NAVIGATION
+===================================================== -->
+
+<div
+    class="mobile-navigation"
+    id="mobileNavigation"
+>
+
+    <div class="mobile-navigation-inner">
+
+
+        <div class="mobile-nav-label">
+            NAVIGATION / 05
         </div>
-        <div class="hero-buttons">
-          <div class="top-buttons">
-            <a href="#projects" class="hero-cta">View Work</a>
-            <a href="resume.pdf" class="hero-cta" target="_blank">Download Resume</a>
-          </div>
-          <a href="#contact" class="hero-cta-ghost center-btn">Get in Touch</a>
-        </div>
-      </div>
-      <div style="display:flex;justify-content:center;">
-        <div class="hero-photo-frame">
-          <img src="profile.jpg" alt="Trushant">
-        </div>
-      </div>
+
+
+        <a href="#about">
+            <span>01</span>
+            ABOUT
+        </a>
+
+
+        <a href="#projects">
+            <span>02</span>
+            PROJECTS
+        </a>
+
+
+        <a href="#research">
+            <span>03</span>
+            RESEARCH
+        </a>
+
+
+        <a href="#experience">
+            <span>04</span>
+            EXPERIENCE
+        </a>
+
+
+        <a href="#contact">
+            <span>05</span>
+            CONTACT
+        </a>
+
+
     </div>
-  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    id="home"
+    class="hero"
+>
+
+
+    <div class="container hero-container">
+
+
+        <div class="hero-copy reveal">
+
+
+            <div class="hero-badge">
+
+                <span class="badge-dot"></span>
+
+                Available for Software Engineering Roles
+
+            </div>
+
+
+            <div class="hero-eyebrow">
+
+                <span></span>
+
+                ENGINEERING SYSTEMS
+                /
+                MUMBAI, INDIA
+
+            </div>
+
+
+            <h1>
+
+                <span class="hero-line-main">
+                    Engineering
+                </span>
+
+                <span class="hero-line-outline">
+                    ideas
+                </span>
+
+                <span class="hero-line-gradient">
+                    into systems.
+                </span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                Computer Engineer building
+                AI-powered products,
+                full-stack platforms,
+                real-time systems and
+                decentralized applications.
+
+                <br><br>
+
+                I enjoy taking complex problems,
+                structuring them into systems and
+                turning them into products that
+                actually ship.
+
+            </p>
+
+
+            <div class="hero-actions">
+
+
+                <a
+                    href="#projects"
+                    class="button button-primary magnetic"
+                >
+
+                    EXPLORE MY WORK
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="https://drive.google.com/file/d/17JISqpn5hxTqiwVGYstGDVL6738Q8JfA/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="button button-secondary magnetic"
+                >
+
+                    VIEW RÉSUMÉ
+
+                    <span>
+                        ↓
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+            <div class="hero-stats">
+
+
+                <div class="hero-stat">
+
+                    <strong>
+                        1000+
+                    </strong>
+
+                    <span>
+                        LEETCODE SOLVED
+                    </span>
+
+                </div>
+                
+                <div class="hero-stat">
+
+                    <strong>
+                        7.77
+                    </strong>
+
+                    <span>
+                        CGPA / 10
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- HERO ORBIT -->
+
+        <div class="hero-visual reveal reveal-delay-2">
+
+
+            <div class="hero-orbit-system">
+
+
+                <div class="orbit orbit-large"></div>
+
+                <div class="orbit orbit-medium"></div>
+
+                <div class="orbit orbit-small"></div>
+
+
+                <div class="hero-planet-ring"></div>
+
+
+                <div class="hero-planet">
+
+                    <img
+                        src="profile.jpg"
+                        alt="Trushant Rathod"
+                    >
+
+                    <div class="planet-glow"></div>
+
+                </div>
+
+
+                <div class="orbit-label label-one">
+                    IDENTITY NODE
+                </div>
+
+
+                <div class="orbit-label label-two">
+                    AI / WEB / SYSTEMS
+                </div>
+
+
+                <div class="orbit-label label-three">
+                    BUILD / SHIP / ITERATE
+                </div>
+
+
+                <div class="satellite satellite-one"></div>
+
+                <div class="satellite satellite-two"></div>
+
+
+            </div>
+
+
+            <div class="visual-caption">
+
+                <span>
+                    SYSTEM STATUS / ONLINE
+                </span>
+
+                <span>
+                    MUMBAI / INDIA
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="hero-bottom">
+
+
+        <div class="container hero-bottom-inner">
+
+
+            <div class="scroll-hint">
+
+                <span class="scroll-arrow">
+                    ↓
+                </span>
+
+                SCROLL TO EXPLORE
+
+            </div>
+
+
+            <span>
+                19.0760° N / 72.8777° E
+            </span>
+
+
+        </div>
+
+
+    </div>
+
+
 </section>
 
-<!-- ══ ABOUT ══ -->
-<section id="about">
-  <canvas class="bg-canvas" id="galaxy-canvas"></canvas>
-  <div class="section-content">
-    <div class="section-eyebrow reveal">Who I Am</div>
-    <h2 class="section-title reveal reveal-delay-1">Engineer &<br>Problem Solver</h2>
-    <div class="about-grid">
-      <div>
-        <p class="about-text reveal reveal-delay-2">
-          I'm a final-year Computer Engineering student at VCET, Mumbai — obsessed with the intersection of AI ethics, decentralized trust, and high-performance web systems. I think deeply about how software touches human lives and build accordingly.
-        </p>
-        <p class="about-text reveal reveal-delay-3" style="margin-top:1.2rem;">
-          From publishing research at an IEEE-co-sponsored international conference to achieving LeetCode Knight status, I bring the same intensity to every challenge.
-        </p>
-        <div class="achievements-row">
-          <div class="achievement-pill reveal reveal-delay-1">🏆 LeetCode Knight — 1976</div>
-          <div class="achievement-pill reveal reveal-delay-2">⭐ CodeChef 3-Star — 1652</div>
-          <div class="achievement-pill reveal reveal-delay-3">📄 IEEE Co-sponsored Research</div>
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section
+    id="about"
+    class="section"
+>
+
+
+    <div class="container">
+
+
+        <div class="section-header reveal">
+
+            <div class="section-label">
+                01 / THE ENGINEER
+            </div>
+
+
+            <h2 class="section-title">
+
+                Curiosity,
+                translated
+
+                <span>
+                    into code.
+                </span>
+
+            </h2>
+
         </div>
-      </div>
-      <div>
-        <div class="skills-grid">
-          <div class="skill-chip reveal reveal-delay-1">Python · TensorFlow</div>
-          <div class="skill-chip reveal reveal-delay-1">Solidity · Web3.js</div>
-          <div class="skill-chip reveal reveal-delay-2">React · FastAPI</div>
-          <div class="skill-chip reveal reveal-delay-2">Node.js · Express</div>
-          <div class="skill-chip reveal reveal-delay-3">MongoDB · Firebase</div>
-          <div class="skill-chip reveal reveal-delay-3">IPFS · Blockchain</div>
-          <div class="skill-chip reveal reveal-delay-4">DSA · C++ · OOP</div>
-          <div class="skill-chip reveal reveal-delay-4">TypeScript · Tailwind</div>
+
+
+        <div class="about-grid">
+
+
+            <div class="about-story reveal">
+
+
+                <p class="about-lead">
+
+                    I like problems that sit
+                    between disciplines -
+                    where software meets
+                    intelligence, experience
+                    and systems thinking.
+
+                </p>
+
+
+                <p class="body-text">
+
+                    I'm a Computer Engineering
+                    graduate from Vidyavardhini's
+                    College of Engineering and
+                    Technology, University of Mumbai.
+
+                    My work spans machine learning,
+                    full-stack engineering,
+                    real-time analytics and
+                    blockchain-based verification.
+
+                </p>
+
+
+                <p class="body-text">
+
+                    The common thread is simple:
+                    understand the problem deeply,
+                    design the architecture carefully,
+                    and build something that can
+                    survive beyond the demo.
+
+                </p>
+
+
+                <div class="achievement-grid">
+
+
+                    <div class="achievement-card">
+                        <small>01</small>
+                        <strong>LEETCODE KNIGHT</strong>
+                        <span>MAX RATING 1976</span>
+                    </div>
+
+
+                    <div class="achievement-card">
+                        <small>02</small>
+                        <strong>CODEFORCES SPECIALIST</strong>
+                        <span>COMPETITIVE PROGRAMMING</span>
+                    </div>
+
+
+                    <div class="achievement-card">
+                        <small>03</small>
+                        <strong>CODECHEF 3★</strong>
+                        <span>MAX RATING 1652</span>
+                    </div>
+
+
+                    <div class="achievement-card">
+                        <small>04</small>
+                        <strong>RESEARCH PRESENTER</strong>
+                        <span>IC3ET 2026</span>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                class="skills-panel glass reveal reveal-delay-1"
+            >
+
+
+                <div class="panel-header">
+
+                    <span>
+                        TECHNICAL LOADOUT
+                    </span>
+
+                    <span>
+                        08 MODULES
+                    </span>
+
+                </div>
+
+
+                <div class="recruiter-signal" aria-label="Recruiter focus areas">
+                    <span class="recruiter-signal-label">RECRUITER SIGNAL</span>
+                    <span class="signal-pill signal-primary">FULL-STACK ENGINEERING</span>
+                    <span class="signal-pill signal-ai">AI / ML</span>
+                    <span class="signal-pill signal-backend">BACKEND / APIs</span>
+                    <span class="signal-pill signal-cp">DSA / COMPETITIVE PROGRAMMING</span>
+                </div>
+
+
+                <div class="skills-grid">
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            01
+                        </small>
+
+                        <strong>
+                            C / C++
+                        </strong>
+
+                        <span>
+                            <b>CORE:</b> DSA · OOP · CP
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            02
+                        </small>
+
+                        <strong>
+                            Python
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> AI/ML · APIs
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            03
+                        </small>
+
+                        <strong>
+                            JavaScript
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> Full Stack · UI
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            04
+                        </small>
+
+                        <strong>
+                            TypeScript
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> Frontend · Services
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            05
+                        </small>
+
+                        <strong>
+                            Databases
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> Data · Persistence
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            06
+                        </small>
+
+                        <strong>
+                            Authentication
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> Auth · Backend
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            07
+                        </small>
+
+                        <strong>
+                            Web3
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> Web3 · Security
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-card">
+
+                        <small>
+                            08
+                        </small>
+
+                        <strong>
+                            Engineering
+                        </strong>
+
+                        <span>
+                            <b>BEST FOR:</b> Architecture · Delivery
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
         </div>
-      </div>
+
+
     </div>
-  </div>
+
 </section>
 
-<!-- ══ PROJECTS ══ -->
-<section id="projects">
-  <div class="section-content">
-    <div class="section-eyebrow reveal">Selected Work</div>
-    <h2 class="section-title reveal reveal-delay-1">Projects</h2>
-    <div class="projects-stack">
 
-        <!-- Project 1: Conscia AI -->
-      <div class="project-block reveal">
-        <div class="project-visual">
-          <canvas class="project-canvas" id="conscia-canvas"></canvas>
-          <div class="project-label">Neural Network · NLP</div>
+<!-- =====================================================
+     PROJECTS
+===================================================== -->
+
+<section
+    id="projects"
+    class="section projects-section"
+>
+
+
+    <div class="section-grid-background"></div>
+
+
+    <div class="container">
+
+
+        <div class="section-header reveal">
+
+            <div class="section-label">
+                02 / SELECTED MISSIONS
+            </div>
+
+
+            <h2 class="section-title">
+
+                Built to be
+
+                <span>
+                    used,
+                </span>
+
+                not just shown.
+
+            </h2>
+
+
+            <p class="section-description">
+
+                Three systems built under
+                very different technical constraints.
+
+            </p>
+
         </div>
 
-        <div>
-          <div class="project-num">01</div>
-          <h3 class="project-title">Conscia — Ethical Shopping AI</h3>
 
-          <p class="project-desc">
-            A neural network that classifies product reviews into ethical categories using TF-IDF and LIME interpretability. Built an end-to-end NLP pipeline with weighted sentiment scoring to generate ethical ratings at inference time.
-          </p>
+        <div class="projects-list">
 
-          <div class="project-tags">
-            <span class="tag">TensorFlow</span>
-            <span class="tag">Keras</span>
-            <span class="tag">LIME</span>
-            <span class="tag">NLP</span>
-            <span class="tag">Python</span>
-          </div>
 
-          <div class="project-links">
-            <a href="https://github.com/trushantrathod/Conscia-Trained"
-              class="project-link"
-              target="_blank"
-              rel="noopener noreferrer">
-              View on GitHub
-            </a>
+            <!-- =================================================
+                 CONSCIA
+            ================================================== -->
 
-            <a href="https://consciashop.netlify.app/"
-              class="project-link"
-              target="_blank"
-              rel="noopener noreferrer">
-              View Website
-            </a>
-          </div>
+            <article
+                class="project-card planet-mission planet-ai glass reveal"
+                data-planet="CONSCIA / ETHEREAL AI"
+            >
+
+
+                <div class="project-visual">
+
+
+                    <div class="project-number">
+                        01
+                    </div>
+
+
+                    <div class="neural-network">
+
+
+                        <svg
+                            viewBox="0 0 600 450"
+                            preserveAspectRatio="none"
+                        >
+
+                            <g>
+
+                                <line x1="80" y1="90" x2="220" y2="65"/>
+                                <line x1="80" y1="90" x2="220" y2="225"/>
+                                <line x1="80" y1="90" x2="220" y2="385"/>
+
+                                <line x1="80" y1="225" x2="220" y2="65"/>
+                                <line x1="80" y1="225" x2="220" y2="225"/>
+                                <line x1="80" y1="225" x2="220" y2="385"/>
+
+                                <line x1="80" y1="360" x2="220" y2="65"/>
+                                <line x1="80" y1="360" x2="220" y2="225"/>
+                                <line x1="80" y1="360" x2="220" y2="385"/>
+
+
+                                <line x1="220" y1="65" x2="370" y2="110"/>
+                                <line x1="220" y1="65" x2="370" y2="225"/>
+                                <line x1="220" y1="65" x2="370" y2="340"/>
+
+                                <line x1="220" y1="225" x2="370" y2="110"/>
+                                <line x1="220" y1="225" x2="370" y2="225"/>
+                                <line x1="220" y1="225" x2="370" y2="340"/>
+
+                                <line x1="220" y1="385" x2="370" y2="110"/>
+                                <line x1="220" y1="385" x2="370" y2="225"/>
+                                <line x1="220" y1="385" x2="370" y2="340"/>
+
+
+                                <line x1="370" y1="110" x2="510" y2="170"/>
+                                <line x1="370" y1="110" x2="510" y2="280"/>
+
+                                <line x1="370" y1="225" x2="510" y2="170"/>
+                                <line x1="370" y1="225" x2="510" y2="280"/>
+
+                                <line x1="370" y1="340" x2="510" y2="170"/>
+                                <line x1="370" y1="340" x2="510" y2="280"/>
+
+                            </g>
+
+                        </svg>
+
+
+                        <div class="network-node node-a"></div>
+                        <div class="network-node node-b"></div>
+                        <div class="network-node node-c"></div>
+
+                        <div class="network-node node-d"></div>
+                        <div class="network-node node-e"></div>
+                        <div class="network-node node-f"></div>
+
+                        <div class="network-node node-g"></div>
+                        <div class="network-node node-h"></div>
+                        <div class="network-node node-i"></div>
+
+                        <div class="network-node node-j"></div>
+                        <div class="network-node node-k"></div>
+
+
+                        <div class="data-pulse pulse-a"></div>
+
+                        <div class="data-pulse pulse-b"></div>
+
+
+                    </div>
+
+
+                    <div class="visual-bottom-label">
+
+                        <span>
+                            TF-IDF → DENSE NET → XAI
+                        </span>
+
+                        <span>
+                            91.5%*
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="project-content">
+
+
+                    <div class="project-category">
+                        AI / NLP / RESPONSIBLE AI
+                    </div>
+
+
+                    <h3>
+                        Conscia —
+                        Ethical Shopping AI
+                    </h3>
+
+
+                    <p>
+
+                        An AI-powered platform that
+                        analyzes product reviews across
+                        Environmental Impact, Labor Rights,
+                        Animal Welfare and Corporate
+                        Governance.
+
+                        Built as an end-to-end NLP
+                        pipeline using TF-IDF,
+                        TensorFlow/Keras, LIME and
+                        Gemini-powered explanations.
+
+                    </p>
+
+
+                    <div class="project-metrics">
+
+
+                        <div>
+
+                            <strong>
+                                91.5%
+                            </strong>
+
+                            <span>
+                                REPORTED ACCURACY
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                LIME
+                            </strong>
+
+                            <span>
+                                EXPLAINABILITY
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                GEMINI
+                            </strong>
+
+                            <span>
+                                AI NARRATIVES
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="tags">
+
+                        <span>TensorFlow</span>
+                        <span>Keras</span>
+                        <span>NLP</span>
+                        <span>TF-IDF</span>
+                        <span>LIME</span>
+                        <span>Python</span>
+
+                    </div>
+
+
+                    <!-- PROJECT BUTTONS -->
+
+                    <div class="project-links">
+
+
+                        <a
+                            href="https://consciashop.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-button website-button magnetic"
+                        >
+
+                            <span class="project-button-icon">
+                                ↗
+                            </span>
+
+                            <span>
+                                VIEW WEBSITE
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="https://github.com/trushantrathod/Conscia-Trained"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-button repo-button magnetic"
+                        >
+
+                            <span class="project-button-icon">
+                                ⌘
+                            </span>
+
+                            <span>
+                                VIEW REPO
+                            </span>
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="project-button case-button magnetic"
+                            data-case-study="conscia"
+                        >
+
+                            <span class="project-button-icon">
+                                +
+                            </span>
+
+                            <span>
+                                CASE STUDY
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </article>
+
+
+            <!-- =================================================
+                 BLOCKCHAIN
+            ================================================== -->
+
+            <article
+                class="project-card project-reverse planet-mission planet-chain glass reveal"
+                data-planet="VERIDIA / TRUST"
+            >
+
+
+                <div class="project-content">
+
+
+                    <div class="project-category">
+                        WEB3 / SECURITY / VERIFICATION
+                    </div>
+
+
+                    <h3>
+                        Blockchain
+                        Certificate
+                        Verification
+                    </h3>
+
+
+                    <p>
+
+                        A decentralized certificate
+                        verification workflow using
+                        Ethereum smart contracts and IPFS.
+
+                        Document hashes are stored
+                        on-chain while encrypted documents
+                        remain off-chain, creating an
+                        independently verifiable trust layer.
+
+                    </p>
+
+
+                    <div class="project-metrics">
+
+
+                        <div>
+
+                            <strong>
+                                ETH
+                            </strong>
+
+                            <span>
+                                SMART CONTRACTS
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                IPFS
+                            </strong>
+
+                            <span>
+                                DOCUMENT STORAGE
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                WEB3
+                            </strong>
+
+                            <span>
+                                WALLET INTERACTION
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="tags">
+
+                        <span>Solidity</span>
+                        <span>Ethereum</span>
+                        <span>IPFS</span>
+                        <span>Web3.js</span>
+                        <span>Node.js</span>
+                        <span>MetaMask</span>
+
+                    </div>
+
+
+                    <div class="project-links">
+
+
+                        <a
+                            href="https://blockchain-certificate-verification2.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-button website-button magnetic"
+                        >
+
+                            <span class="project-button-icon">
+                                ↗
+                            </span>
+
+                            <span>
+                                VIEW WEBSITE
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="https://github.com/trushantrathod/Certificate-Verification-using-Blockchain"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-button repo-button magnetic"
+                        >
+
+                            <span class="project-button-icon">
+                                ⌘
+                            </span>
+
+                            <span>
+                                VIEW REPO
+                            </span>
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="project-button case-button magnetic"
+                            data-case-study="blockchain"
+                        >
+
+                            <span class="project-button-icon">
+                                +
+                            </span>
+
+                            <span>
+                                CASE STUDY
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="project-visual">
+
+
+                    <div class="blockchain-visual">
+
+
+                        <div class="blockchain-line"></div>
+
+
+                        <div class="chain-block block-one">
+
+                            <small>
+                                HASH
+                            </small>
+
+                            <strong>
+                                01
+                            </strong>
+
+                            <span>
+                                VERIFIED
+                            </span>
+
+                        </div>
+
+
+                        <div class="chain-block block-two">
+
+                            <small>
+                                HASH
+                            </small>
+
+                            <strong>
+                                02
+                            </strong>
+
+                            <span>
+                                VERIFIED
+                            </span>
+
+                        </div>
+
+
+                        <div class="chain-block block-three">
+
+                            <small>
+                                HASH
+                            </small>
+
+                            <strong>
+                                03
+                            </strong>
+
+                            <span>
+                                VERIFIED
+                            </span>
+
+                        </div>
+
+
+                        <div class="chain-block block-four">
+
+                            <small>
+                                HASH
+                            </small>
+
+                            <strong>
+                                04
+                            </strong>
+
+                            <span>
+                                VERIFY
+                            </span>
+
+                        </div>
+
+
+                        <div class="blockchain-scan"></div>
+
+
+                    </div>
+
+
+                    <div class="visual-bottom-label">
+
+                        <span>
+                            ETHEREUM / IPFS / SOLIDITY
+                        </span>
+
+                        <span>
+                            TRUST LAYER
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </article>
+
+
+            <!-- =================================================
+                 SOCIAL DASH
+            ================================================== -->
+
+            <article
+                class="project-card planet-mission planet-pulse glass reveal"
+                data-planet="NOVA-07 / SIGNAL"
+            >
+
+
+                <div class="project-visual">
+
+
+                    <div class="analytics-visual">
+
+
+                        <div class="analytics-header">
+
+                            <span>
+                                REAL-TIME / GROWTH STREAM
+                            </span>
+
+                            <strong>
+                                ● LIVE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="analytics-grid"></div>
+
+
+                        <svg
+                            class="analytics-chart"
+                            viewBox="0 0 620 350"
+                            preserveAspectRatio="none"
+                        >
+
+                            <path
+                                d="
+                                    M15 300
+                                    C80 288 100 265 145 279
+                                    S215 240 258 253
+                                    S320 211 358 225
+                                    S420 178 464 199
+                                    S532 139 605 110
+                                "
+                            />
+
+                            <path
+                                class="secondary-chart"
+                                d="
+                                    M15 325
+                                    C90 310 110 296 160 304
+                                    S220 276 265 286
+                                    S325 265 368 275
+                                    S430 238 474 250
+                                    S538 222 605 207
+                                "
+                            />
+
+                        </svg>
+
+
+                        <div class="floating-metric metric-one">
+
+                            <small>
+                                FOLLOWERS
+                            </small>
+
+                            <strong>
+                                +12.8%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="floating-metric metric-two">
+
+                            <small>
+                                SESSION VELOCITY
+                            </small>
+
+                            <strong>
+                                +8.4%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="floating-metric metric-three">
+
+                            <small>
+                                MILESTONE
+                            </small>
+
+                            <strong>
+                                07 / 12
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="visual-bottom-label">
+
+                        <span>
+                            REACT / FASTAPI / MONGODB
+                        </span>
+
+                        <span>
+                            REAL-TIME
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="project-content">
+
+
+                    <div class="project-category">
+                        FULL STACK / REAL-TIME / ANALYTICS
+                    </div>
+
+
+                    <h3>
+                        SocialDash —
+                        Real-Time Analytics
+                    </h3>
+
+
+                    <p>
+
+                        A scalable full-stack social
+                        analytics platform for live growth
+                        metrics, session velocity and
+                        milestone-based progress.
+
+                        React powers the interface while
+                        FastAPI, MongoDB and Firebase
+                        support the backend, persistence
+                        and authentication layers.
+
+                    </p>
+
+
+                    <div class="project-metrics">
+
+
+                        <div>
+
+                            <strong>
+                                REACT
+                            </strong>
+
+                            <span>
+                                FRONTEND
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                FASTAPI
+                            </strong>
+
+                            <span>
+                                BACKEND
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                MONGO
+                            </strong>
+
+                            <span>
+                                PERSISTENCE
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="tags">
+
+                        <span>React</span>
+                        <span>FastAPI</span>
+                        <span>MongoDB</span>
+                        <span>Firebase</span>
+                        <span>REST API</span>
+                        <span>Real-Time</span>
+
+                    </div>
+
+
+                    <div class="project-links">
+
+
+                        <a
+                            href="https://socialdash-app.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-button website-button magnetic"
+                        >
+
+                            <span class="project-button-icon">
+                                ↗
+                            </span>
+
+                            <span>
+                                VIEW WEBSITE
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="https://github.com/trushantrathod/SocialDash"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-button repo-button magnetic"
+                        >
+
+                            <span class="project-button-icon">
+                                ⌘
+                            </span>
+
+                            <span>
+                                VIEW REPO
+                            </span>
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="project-button case-button magnetic"
+                            data-case-study="socialdash"
+                        >
+
+                            <span class="project-button-icon">
+                                +
+                            </span>
+
+                            <span>
+                                CASE STUDY
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </article>
+
+
         </div>
-      </div>
 
-      <!-- Project 2: Blockchain -->
-      <div class="project-block reverse reveal">
-        <div class="project-visual">
-          <canvas class="project-canvas" id="blockchain-canvas"></canvas>
-          <div class="project-label">Ethereum · IPFS · Solidity</div>
-        </div>
 
-        <div>
-          <div class="project-num">02</div>
-          <h3 class="project-title">Blockchain Certificate Verification</h3>
+        <p class="project-footnote reveal">
 
-          <p class="project-desc">
-            Decentralized document verification using Ethereum smart contracts and IPFS. Tamper-proof hash storage on-chain, encrypted documents off-chain. Eliminates reliance on central authorities for credential validation.
-          </p>
+            * 91.5% classification accuracy reported
+            in the Conscia research paper.
 
-          <div class="project-tags">
-            <span class="tag">Solidity</span>
-            <span class="tag">Ethereum</span>
-            <span class="tag">IPFS</span>
-            <span class="tag">Web3.js</span>
-            <span class="tag">Node.js</span>
-          </div>
-
-          <div class="project-links">
-            <a href="https://github.com/trushantrathod/Certificate-Verification-using-Blockchain"
-              class="project-link"
-              target="_blank"
-              rel="noopener noreferrer">
-              View on GitHub
-            </a>
-
-            <a href="https://blockchain-certificate-verification2.netlify.app/"
-              class="project-link"
-              target="_blank"
-              rel="noopener noreferrer">
-              View Website
-            </a>
-          </div>
-        </div>
-      </div>
-
-    <!-- Project 3: SocialDash -->
-    <div class="project-block reveal">
-      <div class="project-visual">
-        <canvas class="project-canvas" id="social-canvas"></canvas>
-        <div class="project-label">React · FastAPI · Real-Time</div>
-      </div>
-
-      <div>
-        <div class="project-num">03</div>
-
-        <h3 class="project-title">SocialDash — Analytics Platform</h3>
-
-        <p class="project-desc">
-          Real-time social media analytics with live growth metrics, session velocity
-          tracking, and milestone-based progress. Delta-based backend updates,
-          MongoDB persistence, and Firebase Auth with dynamic data visualization.
         </p>
 
-        <div class="project-tags">
-          <span class="tag">React</span>
-          <span class="tag">FastAPI</span>
-          <span class="tag">MongoDB</span>
-          <span class="tag">Firebase</span>
-          <span class="tag">Real-Time</span>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     RESEARCH
+===================================================== -->
+
+<section
+    id="research"
+    class="section research-section"
+>
+
+
+    <div class="container">
+
+
+        <div class="section-header reveal">
+
+            <div class="section-label">
+                03 / RESEARCH SIGNAL
+            </div>
+
+
+            <h2 class="section-title">
+
+                From prototype
+                to
+
+                <span>
+                    published work.
+                </span>
+
+            </h2>
+
         </div>
 
-        <a
-          href="https://github.com/trushantrathod/SocialDash"
-          class="project-link"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        <div class="research-card glass reveal">
+
+
+            <div class="research-orbit">
+
+
+                <div class="research-ring ring-one"></div>
+
+                <div class="research-ring ring-two"></div>
+
+
+                <div class="research-core">
+                    AI
+                </div>
+
+
+            </div>
+
+
+            <div class="research-content">
+
+
+                <div class="research-badge">
+
+                    ● PRESENTED / FEB 2026
+
+                </div>
+
+
+                <h3>
+
+                    Conscia:
+                    An AI-Powered
+                    Ethical Shopping
+                    Companion
+
+                </h3>
+
+
+                <p>
+
+                    Presented at the International
+                    Conference on Communication,
+                    Computing and Emerging Technologies
+                    (IC3ET 2026).
+
+                    The research describes a semi-supervised
+                    NLP pipeline combining Teacher–Student
+                    learning, LIME explainability and
+                    generative AI for transparent ethical
+                    shopping analysis.
+
+                </p>
+
+
+                <div class="research-tags">
+
+
+                    <span>
+                        IC3ET 2026
+                    </span>
+
+                    <span>
+                        IEEE TECHNICALLY CO-SPONSORED
+                    </span>
+
+                    <span>
+                        CONFERENCE RECORD #64989
+                    </span>
+
+
+                </div>
+
+
+                <div class="research-buttons">
+
+
+                    <a
+                        href="Conscia-paper.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="button button-primary magnetic"
+                    >
+
+                        VIEW PAPER
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="certificate.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="button button-secondary magnetic"
+                    >
+
+                        VIEW CERTIFICATE
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     EXPERIENCE
+===================================================== -->
+
+<section
+    id="experience"
+    class="section"
+>
+
+
+    <div class="container">
+
+
+        <div class="section-header reveal">
+
+            <div class="section-label">
+                04 / MISSION LOG
+            </div>
+
+
+            <h2 class="section-title">
+
+                Where the work
+                <span>
+                    actually happened.
+                </span>
+
+            </h2>
+
+        </div>
+
+
+        <div class="timeline">
+
+
+            <div class="timeline-line"></div>
+
+
+            <!-- WORK -->
+
+            <article class="timeline-item reveal">
+
+
+                <div class="timeline-dot"></div>
+
+
+                <div class="timeline-date">
+
+                    DEC 2023
+
+                    <br>
+
+                    JAN 2024
+
+                </div>
+
+
+                <div class="timeline-card glass">
+
+
+                    <div class="timeline-category">
+                        WEB DEVELOPMENT
+                    </div>
+
+
+                    <h3>
+                        Web Developer Intern
+                    </h3>
+
+
+                    <div class="timeline-company">
+                        CODSOFT
+                    </div>
+
+
+                    <p>
+
+                        Developed responsive interfaces
+                        using JavaScript, HTML and CSS
+                        with cross-browser compatibility.
+
+                        Implemented reusable UI components,
+                        structured layouts, form validation,
+                        dynamic client-side interactions
+                        and participated in debugging
+                        and testing cycles.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span>JavaScript</span>
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>UI Development</span>
+
+                    </div>
+
+
+                </div>
+
+
+            </article>
+
+
+            <!-- EDUCATION -->
+
+            <article class="timeline-item reveal">
+
+
+                <div class="timeline-dot"></div>
+
+
+                <div class="timeline-date">
+
+                    JUL 2022
+
+                    <br>
+
+                    JUN 2026
+
+                </div>
+
+
+                <div class="timeline-card glass">
+
+
+                    <div class="timeline-category">
+                        EDUCATION / COMPUTER ENGINEERING
+                    </div>
+
+
+                    <h3>
+                        B.E. Computer Engineering
+                    </h3>
+
+
+                    <div class="timeline-company">
+                        VCET / UNIVERSITY OF MUMBAI
+                    </div>
+
+
+                    <p>
+
+                        Built a strong foundation across
+                        Data Structures and Algorithms,
+                        Object-Oriented Programming,
+                        software architecture and
+                        application development.
+
+                        Graduated with a reported
+                        7.77/10 CGPA.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span>DSA</span>
+                        <span>OOP</span>
+                        <span>Systems</span>
+                        <span>Competitive Programming</span>
+
+                    </div>
+
+
+                </div>
+
+
+            </article>
+
+
+        </div>
+
+
+        <div class="signal-board reveal">
+
+
+            <div class="signal">
+
+                <small>
+                    ALGORITHM SIGNAL
+                </small>
+
+                <strong>
+                    TOP 4.22%
+                </strong>
+
+                <span>
+                    LEETCODE GLOBAL
+                </span>
+
+            </div>
+
+
+            <div class="signal">
+
+                <small>
+                    COMPETITIVE SIGNAL
+                </small>
+
+                <strong>
+                    3 ★ / SPECIALIST
+                </strong>
+
+                <span>
+                    CODECHEF / CODEFORCES
+                </span>
+
+            </div>
+
+
+            <div class="signal">
+
+                <small>
+                    RESEARCH SIGNAL
+                </small>
+
+                <strong>
+                    01
+                </strong>
+
+                <span>
+                    CONFERENCE PRESENTATION
+                </span>
+
+            </div>
+
+
+            <div class="signal">
+
+                <small>
+                    ENGINEERING SIGNAL
+                </small>
+
+                <strong>
+                    END-TO-END
+                </strong>
+
+                <span>
+                    BUILD / TEST / SHIP
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    id="contact"
+    class="section contact-section"
+>
+
+
+    <div class="container">
+
+
+        <div class="contact-grid">
+
+
+            <div class="contact-copy reveal">
+
+
+                <div class="section-label">
+                    05 / CONTACT
+                </div>
+
+
+                <h2 class="contact-title">
+
+                    Let's build
+                    the
+
+                    <span>
+                        next system.
+                    </span>
+
+                </h2>
+
+
+                <p>
+
+                    Looking for software engineering
+                    opportunities where strong
+                    fundamentals, thoughtful architecture
+                    and fast learning actually matter.
+
+                </p>
+
+
+                <div class="contact-action">
+
+                    <a
+                        href="mailto:trushantrathod@gmail.com"
+                        class="button button-primary magnetic"
+                    >
+
+                        START A CONVERSATION
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                class="contact-card glass reveal reveal-delay-1"
+            >
+
+
+                <div class="contact-card-header">
+
+                    <span>
+                        DIRECT CHANNELS
+                    </span>
+
+                    <span>
+                        ONLINE
+                    </span>
+
+                </div>
+
+
+                <a
+                    href="mailto:trushantrathod@gmail.com"
+                    class="contact-link magnetic"
+                >
+
+                    <span class="contact-icon">
+                        ✉
+                    </span>
+
+                    <span>
+
+                        <small>
+                            EMAIL
+                        </small>
+
+                        <strong>
+                            trushantrathod@gmail.com
+                        </strong>
+
+                    </span>
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="https://www.linkedin.com/in/trushant-rathod-b8705b256/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-link magnetic"
+                >
+
+                    <span class="contact-icon">
+                        in
+                    </span>
+
+                    <span>
+
+                        <small>
+                            LINKEDIN
+                        </small>
+
+                        <strong>
+                            /trushant-rathod
+                        </strong>
+
+                    </span>
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="https://github.com/trushantrathod"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-link magnetic"
+                >
+
+                    <span class="contact-icon">
+                        ⌘
+                    </span>
+
+                    <span>
+
+                        <small>
+                            GITHUB
+                        </small>
+
+                        <strong>
+                            /trushantrathod
+                        </strong>
+
+                    </span>
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="https://drive.google.com/file/d/17JISqpn5hxTqiwVGYstGDVL6738Q8JfA/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-link magnetic"
+                >
+
+                    <span class="contact-icon">
+                        ↓
+                    </span>
+
+                    <span>
+
+                        <small>
+                            RÉSUMÉ
+                        </small>
+
+                        <strong>
+                            OPEN RESUME
+                        </strong>
+
+                    </span>
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+<!-- =====================================================
+     BOTTOM SCROLL BAR
+===================================================== -->
+
+<div
+    class="scroll-dock"
+    id="scrollDock"
+>
+    <div class="scroll-dock-track" aria-hidden="true">
+        <div class="scroll-dock-progress" id="scrollDockProgress"></div>
+        <div class="scroll-dock-glow" id="scrollDockGlow"></div>
+        <div class="scroll-dock-core"></div>
+    </div>
+
+    <div class="scroll-dock-info">
+        <span class="scroll-dock-section-label">CURRENT ORBIT</span>
+        <strong id="scrollDockSection">HOME</strong>
+        <span class="scroll-dock-direction">SCROLL / EXPAND</span>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     CASE STUDY MODAL
+===================================================== -->
+
+<div
+    class="case-modal"
+    id="caseModal"
+    aria-hidden="true"
+>
+
+
+    <div
+        class="case-modal-backdrop"
+        id="caseModalBackdrop"
+    ></div>
+
+
+    <div class="case-modal-content">
+
+
+        <button
+            class="case-modal-close"
+            id="caseModalClose"
+            type="button"
+            aria-label="Close case study"
         >
-          View on GitHub
-        </a>
+            ×
+        </button>
 
-        <a
-          href="https://socialdash-app.netlify.app/"
-          class="project-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View Website
-        </a>
-      </div>
-    </div>
+
+        <div class="modal-label">
+            CASE STUDY /
+            <span id="modalNumber">
+                01
+            </span>
+        </div>
+
+
+        <h3 id="modalTitle">
+            Project
+        </h3>
+
+
+        <p
+            class="modal-summary"
+            id="modalSummary"
+        ></p>
+
+
+        <div class="modal-grid">
+
+
+            <div>
+
+                <div class="modal-heading">
+                    SYSTEM NOTES
+                </div>
+
+
+                <div
+                    id="modalPoints"
+                    class="modal-points"
+                ></div>
+
+            </div>
+
+
+            <div>
+
+                <div class="modal-heading">
+                    TECH STACK
+                </div>
+
+
+                <div
+                    id="modalTags"
+                    class="tags"
+                ></div>
+
+
+                <div class="modal-heading modal-role-heading">
+                    ROLE
+                </div>
+
+
+                <p
+                    class="modal-role"
+                    id="modalRole"
+                ></p>
+
+            </div>
+
+
+        </div>
+
 
     </div>
-  </div>
-</section>
 
-<!-- ══ CONFERENCE ══ -->
-<section id="conference">
-  <canvas class="bg-canvas" id="conf-canvas"></canvas>
-  <div class="section-content">
-    <div class="section-eyebrow reveal">Research</div>
-    <h2 class="section-title reveal reveal-delay-1">Published Work</h2>
-    <div class="conf-card reveal reveal-delay-2">
-      <p class="conf-name">Conscia: An AI-Powered Ethical Shopping Companion</p>
-      <p class="conf-meta">International Conference on Communication, Computing &amp; Emerging Technologies</p>
-      <p class="conf-meta" style="margin-top:0.4rem;">IC3ET 2026 · February 2026</p>
-      <div class="ieee-row">
-        <div class="ieee-badge">IEEE Technically Co-Sponsored</div>
-        <a href="https://drive.google.com/file/d/1snh3xxU_6tgvz7DzG5MEV9CCicsCURqF/view?usp=sharing" 
-          class="cert-btn" 
-          target="_blank">
-          View Paper
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- ══ EXPERIENCE ══ -->
-<section id="experience">
-  <div class="section-content">
-    <div class="section-eyebrow reveal">Work History</div>
-    <h2 class="section-title reveal reveal-delay-1">Experience</h2>
-    <div class="exp-card reveal reveal-delay-2">
-      <div class="exp-role">Web Developer Intern</div>
-      <div class="exp-company">CodSoft</div>
-      <div class="exp-period">December 2023 – January 2024</div>
-      <ul class="exp-points">
-        <li>Developed responsive web interfaces using JavaScript, HTML, and CSS with cross-browser compatibility.</li>
-        <li>Implemented reusable UI components and structured layouts for consistency across multiple web pages.</li>
-        <li>Built interactive client-side features including form validation and dynamic elements to enhance usability.</li>
-        <li>Collaborated on debugging and testing cycles to improve application reliability under deadline pressure.</li>
-      </ul>
-    </div>
-    <div class="exp-card reveal reveal-delay-3">
-      <div class="exp-role">B.E in Computer Engineering</div>
-      <div class="exp-company">Vidyavardhini's College of Engineering and Technology · University of Mumbai</div>
-      <div class="exp-period">July 2022 – June 2026 · CGPA 7.77/10</div>
-      <ul class="exp-points">
-        <li>Core coursework in Data Structures, Algorithms, Operating Systems, and Computer Networks.</li>
-        <li>Active participant in competitive programming — LeetCode Knight, CodeChef 3-Star.</li>
-        <li>Presented original research at IEEE co-sponsored international conference in Feb 2026.</li>
-      </ul>
-    </div>
-  </div>
-</section>
 
-<!-- ══ CONTACT ══ -->
-<section id="contact">
-  <canvas class="bg-canvas" id="contact-canvas"></canvas>
-  <div class="section-content">
-    <div class="contact-grid">
-      <div>
-        <div class="section-eyebrow reveal">Let's Talk</div>
-        <h2 class="contact-big reveal reveal-delay-1">Open to<br><span>new roles</span><br>&amp; collabs.</h2>
-      </div>
-      <div class="contact-links">
-        <a href="mailto:trushantrathod@gmail.com" class="contact-item reveal reveal-delay-1">
-          <div class="contact-icon">✉</div>
-          <div>
-            <div class="contact-label">Email</div>
-            <div class="contact-val">trushantrathod@gmail.com</div>
-          </div>
-        </a>
-        <a href="https://www.linkedin.com/in/trushant-rathod-b8705b256/" class="contact-item reveal reveal-delay-2" target="_blank">
-          <div class="contact-icon">in</div>
-          <div>
-            <div class="contact-label">LinkedIn</div>
-            <div class="contact-val">linkedin.com/in/trushantrathod</div>
-          </div>
-        </a>
-        <a href="https://github.com/trushantrathod" class="contact-item reveal reveal-delay-3" target="_blank">
-          <div class="contact-icon">⌥</div>
-          <div>
-            <div class="contact-label">GitHub</div>
-            <div class="contact-val">github.com/trushantrathod</div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
-  <span>Trushant Rathod © 2026</span>
-  <span>Mumbai, Maharashtra</span>
+
+    <div class="container footer-inner">
+
+        <span>
+            TRUSHANT RATHOD
+            /
+            SOFTWARE · AI · WEB3
+        </span>
+
+        <span>
+            © 2026
+            /
+            BUILT FOR THE NEXT MISSION
+        </span>
+
+    </div>
+
 </footer>
 
+
+<!-- =====================================================
+     JS
+===================================================== -->
+
 <script src="script.js"></script>
+
 </body>
+
 </html>
