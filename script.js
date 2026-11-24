@@ -1,1675 +1,2246 @@
 "use strict";
 
-
 /* =====================================================
-   GLOBAL
+   01. GLOBAL UTILITIES
 ===================================================== */
 
-const prefersReducedMotion =
-    window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-    ).matches;
+const root = document.documentElement;
 
+const $ = (selector, parent = document) =>
+    parent.querySelector(selector);
 
-const isTouchDevice =
-    window.matchMedia(
-        "(pointer: coarse)"
-    ).matches;
+const $$ = (selector, parent = document) =>
+    Array.from(parent.querySelectorAll(selector));
 
-
-const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-
-const $$ = (selector, root = document) =>
-    [...root.querySelectorAll(selector)];
+const motion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+);
 
 
 /* =====================================================
-   THREE.JS SPACE BACKGROUND
-===================================================== */
-
-function initSpaceBackground() {
-
-    const container =
-        document.getElementById(
-            "space-background"
-        );
-
-
-    if (
-        !container ||
-        typeof THREE === "undefined"
-    ) {
-        return;
-    }
-
-
-    const scene =
-        new THREE.Scene();
-
-
-    const camera =
-        new THREE.PerspectiveCamera(
-            70,
-            window.innerWidth /
-            window.innerHeight,
-            0.1,
-            3000
-        );
-
-
-    camera.position.z =
-        520;
-
-
-    const renderer =
-        new THREE.WebGLRenderer({
-            alpha: true,
-            antialias: true
-        });
-
-    renderer.setPixelRatio(
-        Math.min(
-            window.devicePixelRatio || 1,
-            1.5 
-        )
-    );
-
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-
-
-    container.appendChild(
-        renderer.domElement
-    );
-
-
-    /* ------------------------------------------
-       PRIMARY STARFIELD
-    ------------------------------------------ */
-
-    const primaryGeometry =
-        new THREE.BufferGeometry();
-
-    const primaryCount =
-        window.innerWidth < 600
-            ? 500
-            : 1000;
-
-
-    const primaryPositions =
-        new Float32Array(
-            primaryCount * 3
-        );
-
-
-    for (
-        let i = 0;
-        i < primaryPositions.length;
-        i++
-    ) {
-
-        primaryPositions[i] =
-            (
-                Math.random() - .5
-            ) * 2200;
-
-    }
-
-
-    primaryGeometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(
-            primaryPositions,
-            3
-        )
-    );
-
-
-    const primaryMaterial =
-        new THREE.PointsMaterial({
-
-            size:
-                window.innerWidth < 600
-                    ? 2.1
-                    : 2.5,
-
-            color:
-                0xA29BFE,
-
-            transparent:
-                true,
-
-            opacity:
-                .72,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:
-                false
-
-        });
-
-
-    const primaryStars =
-        new THREE.Points(
-            primaryGeometry,
-            primaryMaterial
-        );
-
-
-    scene.add(
-        primaryStars
-    );
-
-
-    /* ------------------------------------------
-       CYAN STARFIELD
-    ------------------------------------------ */
-
-    const secondaryGeometry =
-        new THREE.BufferGeometry();
-
-    const secondaryCount =
-        window.innerWidth < 600
-            ? 150
-            : 400;
-
-
-    const secondaryPositions =
-        new Float32Array(
-            secondaryCount * 3
-        );
-
-
-    for (
-        let i = 0;
-        i < secondaryPositions.length;
-        i++
-    ) {
-
-        secondaryPositions[i] =
-            (
-                Math.random() - .5
-            ) * 2700;
-
-    }
-
-
-    secondaryGeometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(
-            secondaryPositions,
-            3
-        )
-    );
-
-
-    const secondaryMaterial =
-        new THREE.PointsMaterial({
-
-            size:
-                1.5,
-
-            color:
-                0x67E8F9,
-
-            transparent:
-                true,
-
-            opacity:
-                .30,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:
-                false
-
-        });
-
-
-    const secondaryStars =
-        new THREE.Points(
-            secondaryGeometry,
-            secondaryMaterial
-        );
-
-
-    scene.add(
-        secondaryStars
-    );
-
-
-    /* ------------------------------------------
-       MOUSE TARGET
-    ------------------------------------------ */
-
-    let mouseX = 0;
-
-    let mouseY = 0;
-
-    let targetX = 0;
-
-    let targetY = 0;
-
-
-    let currentMouseX = 0;
-
-    let currentMouseY = 0;
-
-
-    if (!isTouchDevice) {
-
-        document.addEventListener(
-            "mousemove",
-            (event) => {
-
-                mouseX =
-                    (
-                        event.clientX /
-                        window.innerWidth
-                    ) * 2 - 1;
-
-
-                mouseY =
-                    (
-                        event.clientY /
-                        window.innerHeight
-                    ) * 2 - 1;
-
-            }
-        );
-
-    }
-
-
-    /* ------------------------------------------
-       SMOOTH SCROLL VELOCITY LERP
-    ------------------------------------------ */
-
-    let previousScrollY =
-        window.scrollY;
-
-
-    let currentScrollY =
-        window.scrollY;
-
-
-    let scrollVelocity =
-        0;
-
-
-    window.addEventListener(
-        "scroll",
-        () => {
-
-            currentScrollY =
-                window.scrollY;
-
-        },
-        {
-            passive:
-                true
-        }
-    );
-
-
-    /* ------------------------------------------
-       ANIMATION
-    ------------------------------------------ */
-
-    const clock =
-        new THREE.Clock();
-
-
-    function animate() {
-
-        requestAnimationFrame(
-            animate
-        );
-
-
-        const elapsed =
-            clock.getElapsedTime();
-
-
-        /*
-         * Smooth mouse-following rotation
-         */
-
-        targetX =
-            mouseX * .08;
-
-
-        targetY =
-            mouseY * .045;
-
-
-        currentMouseX +=
-            (
-                targetX -
-                currentMouseX
-            ) * .025;
-
-
-        currentMouseY +=
-            (
-                targetY -
-                currentMouseY
-            ) * .025;
-
-
-        /*
-         * Slow natural motion
-         */
-
-        primaryStars.rotation.y +=
-            .00075;
-
-
-        primaryStars.rotation.x +=
-            .00012;
-
-
-        secondaryStars.rotation.y -=
-            .00035;
-
-
-        secondaryStars.rotation.x +=
-            .00008;
-
-
-        /*
-         * Cursor interaction
-         */
-
-        primaryStars.rotation.y +=
-            currentMouseX *
-            .0017;
-
-
-        primaryStars.rotation.x +=
-            currentMouseY *
-            .0012;
-
-
-        secondaryStars.rotation.y +=
-            currentMouseX *
-            .00065;
-
-
-        secondaryStars.rotation.x +=
-            currentMouseY *
-            .00045;
-
-
-        /*
-         * Scroll warp with smoothing applied
-         */
-
-        let rawVelocity =
-            currentScrollY -
-            previousScrollY;
-
-        previousScrollY =
-            currentScrollY;
-
-        // The key to silky smooth stars: Lerp the raw velocity
-        scrollVelocity +=
-            (rawVelocity - scrollVelocity) * 0.15;
-
-
-        primaryStars.position.z +=
-            scrollVelocity *
-            .30;
-
-
-        if (
-            primaryStars.position.z >
-            350
-        ) {
-
-            primaryStars.position.z =
-                -350;
-
-        }
-
-
-        if (
-            primaryStars.position.z <
-            -350
-        ) {
-
-            primaryStars.position.z =
-                350;
-
-        }
-
-
-        /*
-         * Slight camera depth breathing
-         */
-
-        camera.position.x +=
-            (
-                currentMouseX * 3 -
-                camera.position.x
-            ) * .01;
-
-
-        camera.position.y +=
-            (
-                -currentMouseY * 3 -
-                camera.position.y
-            ) * .01;
-
-
-        camera.lookAt(
-            scene.position
-        );
-
-
-        renderer.render(
-            scene,
-            camera
-        );
-
-    }
-
-
-    animate();
-
-
-    /* ------------------------------------------
-       RESIZE
-    ------------------------------------------ */
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            camera.aspect =
-                window.innerWidth /
-                window.innerHeight;
-
-
-            camera.updateProjectionMatrix();
-
-
-            renderer.setSize(
-                window.innerWidth,
-                window.innerHeight
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   CURSOR + CURSOR LIGHT
-===================================================== */
-
-function initCursor() {
-
-    if (isTouchDevice) {
-        return;
-    }
-
-
-    const cursor =
-        document.getElementById(
-            "cursor"
-        );
-
-
-    const cursorRing =
-        document.getElementById(
-            "cursorRing"
-        );
-
-
-    const cursorLight =
-        document.getElementById(
-            "cursor-light"
-        );
-
-
-    if (
-        !cursor ||
-        !cursorRing
-    ) {
-        return;
-    }
-
-
-    let mouseX =
-        window.innerWidth / 2;
-
-
-    let mouseY =
-        window.innerHeight / 2;
-
-
-    let ringX =
-        mouseX;
-
-
-    let ringY =
-        mouseY;
-
-
-    let lightX =
-        mouseX;
-
-
-    let lightY =
-        mouseY;
-
-
-    document.addEventListener(
-        "mousemove",
-        (event) => {
-
-            mouseX =
-                event.clientX;
-
-            mouseY =
-                event.clientY;
-
-
-            cursor.style.left =
-                `${mouseX}px`;
-
-            cursor.style.top =
-                `${mouseY}px`;
-
-        }
-    );
-
-
-    function animateCursor() {
-
-        ringX +=
-            (
-                mouseX -
-                ringX
-            ) * .14;
-
-
-        ringY +=
-            (
-                mouseY -
-                ringY
-            ) * .14;
-
-
-        lightX +=
-            (
-                mouseX -
-                lightX
-            ) * .045;
-
-
-        lightY +=
-            (
-                mouseY -
-                lightY
-            ) * .045;
-
-
-        cursorRing.style.left =
-            `${ringX}px`;
-
-
-        cursorRing.style.top =
-            `${ringY}px`;
-
-
-        if (cursorLight) {
-
-            cursorLight.style.left =
-                `${lightX}px`;
-
-
-            cursorLight.style.top =
-                `${lightY}px`;
-
-        }
-
-
-        requestAnimationFrame(
-            animateCursor
-        );
-
-    }
-
-
-    animateCursor();
-
-
-    const interactiveElements =
-        $$(
-            "a, button, .skill-card, .project-card, .contact-link"
-        );
-
-
-    interactiveElements.forEach(
-        (element) => {
-
-            element.addEventListener(
-                "mouseenter",
-                () => {
-
-                    cursorRing.classList.add(
-                        "active"
-                    );
-
-                }
-            );
-
-
-            element.addEventListener(
-                "mouseleave",
-                () => {
-
-                    cursorRing.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   MAGNETIC BUTTONS
-===================================================== */
-
-function initMagneticElements() {
-
-    if (
-        isTouchDevice ||
-        prefersReducedMotion
-    ) {
-        return;
-    }
-
-
-    $$(".magnetic").forEach(
-        (element) => {
-
-            element.addEventListener(
-                "mousemove",
-                (event) => {
-
-                    const rect =
-                        element.getBoundingClientRect();
-
-
-                    const x =
-                        event.clientX -
-                        (
-                            rect.left +
-                            rect.width / 2
-                        );
-
-
-                    const y =
-                        event.clientY -
-                        (
-                            rect.top +
-                            rect.height / 2
-                        );
-
-
-                    element.style.transform =
-                        `translate(${x * .07}px, ${y * .07}px)`;
-
-                }
-            );
-
-
-            element.addEventListener(
-                "mouseleave",
-                () => {
-
-                    element.style.transform =
-                        "";
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   GSAP REVEALS
-===================================================== */
-
-function initRevealAnimations() {
-
-    if (
-        typeof gsap === "undefined"
-    ) {
-        return;
-    }
-
-
-    if (
-        typeof ScrollTrigger !== "undefined"
-    ) {
-
-        gsap.registerPlugin(
-            ScrollTrigger
-        );
-
-    }
-
-
-    const elements =
-        $$(".reveal");
-
-
-    if (
-        prefersReducedMotion
-    ) {
-
-        elements.forEach(
-            (element) => {
-
-                element.style.opacity =
-                    "1";
-
-                element.style.transform =
-                    "none";
-
-            }
-        );
-
-        return;
-
-    }
-
-
-    elements.forEach(
-        (element) => {
-
-            gsap.to(
-                element,
-                {
-
-                    scrollTrigger: {
-
-                        trigger:
-                            element,
-
-                        start:
-                            "top 87%",
-
-                        once:
-                            true
-
-                    },
-
-                    opacity:
-                        1,
-
-                    y:
-                        0,
-
-                    duration:
-                        .9,
-
-                    ease:
-                        "power3.out"
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   NAVIGATION
+   02. RESPONSIVE NAVIGATION
 ===================================================== */
 
 function initNavigation() {
 
+    const button = $("#menuToggle");
+    const nav = $("#navigation");
 
-    const nav =
-        document.getElementById(
-            "topNav"
+    const mobile = window.matchMedia(
+        "(max-width: 760px)"
+    );
+
+    const setOpen = (open, returnFocus = false) => {
+
+        nav.classList.toggle("open", open);
+
+        button.setAttribute(
+            "aria-expanded",
+            String(open)
+        );
+
+        button.setAttribute(
+            "aria-label",
+            open
+                ? "Close navigation"
+                : "Open navigation"
+        );
+
+        if (returnFocus) {
+            button.focus();
+        }
+
+    };
+
+
+    // Toggle hamburger menu
+
+    button.addEventListener("click", () => {
+
+        setOpen(
+            button.getAttribute("aria-expanded") !== "true"
+        );
+
+    });
+
+
+    // Close menu after selecting a section
+
+    $$("a", nav).forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            setOpen(false);
+
+        });
+
+    });
+
+
+    // Close menu using Escape
+
+    document.addEventListener("keydown", event => {
+
+        if (
+            event.key === "Escape" &&
+            button.getAttribute("aria-expanded") === "true"
+        ) {
+
+            setOpen(false, true);
+
+        }
+
+    });
+
+
+    // Close menu when clicking outside
+
+    document.addEventListener("click", event => {
+
+        if (
+            button.getAttribute("aria-expanded") === "true" &&
+            !nav.contains(event.target) &&
+            !button.contains(event.target)
+        ) {
+
+            setOpen(false);
+
+        }
+
+    });
+
+
+    // Reset navigation when changing screen sizes
+
+    const resetMenu = () => setOpen(false);
+
+    if (mobile.addEventListener) {
+
+        mobile.addEventListener(
+            "change",
+            resetMenu
+        );
+
+    } else {
+
+        mobile.addListener(resetMenu);
+
+    }
+
+}
+
+
+/* =====================================================
+   03. SCROLL PROGRESS AND ACTIVE NAVIGATION
+===================================================== */
+
+function initScrollState() {
+
+    const progress = $(".scroll-progress");
+
+    const links = $$("#navigation a");
+
+    const sections = links
+        .map(link => $(link.getAttribute("href")))
+        .filter(Boolean);
+
+    let frame = 0;
+    let active = "";
+
+
+    const paint = () => {
+
+        frame = 0;
+
+        const max = Math.max(
+            1,
+            root.scrollHeight - window.innerHeight
         );
 
 
-    const mobileButton =
-        document.getElementById(
-            "mobileMenuButton"
+        // Update progress bar
+
+        const percentage = Math.min(
+            1,
+            Math.max(0, window.scrollY / max)
         );
 
+        progress.style.transform =
+            `scaleX(${percentage})`;
 
-    const mobileNavigation =
-        document.getElementById(
-            "mobileNavigation"
+
+        // Determine currently visible section
+
+        let current = "";
+
+        const marker = Math.min(
+            220,
+            window.innerHeight * .33
         );
 
+        for (const section of sections) {
 
-    /* ------------------------------------------
-       MOBILE MENU
-    ------------------------------------------ */
+            if (
+                section.getBoundingClientRect().top <= marker
+            ) {
 
-    if (
-        mobileButton &&
-        mobileNavigation
-    ) {
-
-        mobileButton.addEventListener(
-            "click",
-            () => {
-
-                const open =
-                    mobileButton.classList.toggle(
-                        "open"
-                    );
-
-
-                mobileNavigation.classList.toggle(
-                    "open",
-                    open
-                );
-
-
-                mobileButton.setAttribute(
-                    "aria-expanded",
-                    String(open)
-                );
-
-
-                document.body.style.overflow =
-                    open
-                        ? "hidden"
-                        : "";
+                current = section.id;
 
             }
+
+        }
+
+
+        // Highlight contact at the bottom
+
+        if (
+            window.scrollY > 0 &&
+            max - window.scrollY < 4
+        ) {
+
+            current = "contact";
+
+        }
+
+
+        // Only update when the active section changes
+
+        if (active !== current) {
+
+            active = current;
+
+            links.forEach(link => {
+
+                if (link.hash === `#${current}`) {
+
+                    link.setAttribute(
+                        "aria-current",
+                        "location"
+                    );
+
+                } else {
+
+                    link.removeAttribute("aria-current");
+
+                }
+
+            });
+
+        }
+
+    };
+
+
+    // Limit scroll updates to one per animation frame
+
+    const schedule = () => {
+
+        if (!frame) {
+
+            frame = requestAnimationFrame(paint);
+
+        }
+
+    };
+
+
+    window.addEventListener(
+        "scroll",
+        schedule,
+        { passive: true }
+    );
+
+    window.addEventListener(
+        "resize",
+        schedule,
+        { passive: true }
+    );
+
+    window.addEventListener(
+        "load",
+        schedule,
+        { once: true }
+    );
+
+
+    // Update progress when case studies expand
+
+    document.addEventListener(
+        "toggle",
+        schedule,
+        true
+    );
+
+
+    if ("ResizeObserver" in window) {
+
+        new ResizeObserver(schedule)
+            .observe(document.body);
+
+    }
+
+    paint();
+
+}
+
+
+/* =====================================================
+   04. SCROLL REVEAL ANIMATIONS
+===================================================== */
+
+function initMotion() {
+
+    if (motion.matches) {
+        return;
+    }
+
+    root.classList.add("motion-ready");
+
+
+    // Content remains visible in unsupported browsers
+
+    if (!("IntersectionObserver" in window)) {
+        return;
+    }
+
+    const running = new Set();
+
+
+    const observer = new IntersectionObserver(
+
+        entries => {
+
+            for (const entry of entries) {
+
+                if (!entry.isIntersecting) {
+                    continue;
+                }
+
+
+                // Section entrance animation runs once
+
+                observer.unobserve(entry.target);
+
+
+                if (
+                    motion.matches ||
+                    root.classList.contains("motion-paused")
+                ) {
+
+                    continue;
+
+                }
+
+                const target = entry.target;
+
+
+                if (
+                    target.getBoundingClientRect().top > 0 &&
+                    typeof target.animate === "function"
+                ) {
+
+                    const animation = target.animate(
+
+                        [
+                            {
+                                opacity: .15,
+                                transform: "translateY(18px)"
+                            },
+
+                            {
+                                opacity: 1,
+                                transform: "translateY(0)"
+                            }
+                        ],
+
+                        {
+                            duration: 600,
+
+                            easing:
+                                "cubic-bezier(.22,1,.36,1)"
+                        }
+
+                    );
+
+                    running.add(animation);
+
+                    animation.onfinish =
+                    animation.oncancel =
+                        () => running.delete(animation);
+
+                }
+
+            }
+
+        },
+
+        {
+            threshold: 0,
+            rootMargin: "0px 0px -35px 0px"
+        }
+
+    );
+
+
+    $$("[data-reveal]").forEach(element => {
+
+        observer.observe(element);
+
+    });
+
+
+    // Respect system accessibility preferences
+
+    const onMotionChange = () => {
+
+        if (motion.matches) {
+
+            observer.disconnect();
+
+            running.forEach(animation => {
+
+                animation.cancel();
+
+            });
+
+            root.classList.remove("motion-ready");
+
+        }
+
+    };
+
+
+    if (motion.addEventListener) {
+
+        motion.addEventListener(
+            "change",
+            onMotionChange
+        );
+
+    } else {
+
+        motion.addListener(onMotionChange);
+
+    }
+
+}
+
+
+/* =====================================================
+   05. CONTACT AND COPY EMAIL
+===================================================== */
+
+function initContact() {
+
+    const button = $("#copyEmail");
+    const status = $("#copyStatus");
+
+    const email = "trushantrathod@gmail.com";
+
+    let resetTimer;
+
+
+    button.addEventListener("click", async () => {
+
+        let copied = false;
+
+
+        // Modern Clipboard API
+
+        try {
+
+            if (
+                navigator.clipboard &&
+                window.isSecureContext
+            ) {
+
+                await navigator.clipboard.writeText(email);
+
+                copied = true;
+
+            }
+
+        } catch (error) {
+
+            // Continue with fallback
+
+        }
+
+
+        // Fallback for older browsers
+
+        if (!copied) {
+
+            const field =
+                document.createElement("textarea");
+
+            field.value = email;
+
+            field.setAttribute("readonly", "");
+
+            field.style.cssText = `
+                position: fixed;
+                left: 0;
+                top: 0;
+                opacity: 0;
+                pointer-events: none;
+            `;
+
+            document.body.appendChild(field);
+
+            field.select();
+
+            try {
+
+                copied =
+                    document.execCommand("copy");
+
+            } catch (error) {}
+
+            field.remove();
+
+            button.focus();
+
+        }
+
+
+        // Update button feedback
+
+        button.textContent =
+            copied
+                ? "Copied!"
+                : "Select email";
+
+
+        status.textContent =
+            copied
+                ? "Email address copied."
+                : "Clipboard unavailable. Select the email address manually.";
+
+
+        // Manual selection fallback
+
+        if (!copied && window.getSelection) {
+
+            const range = document.createRange();
+
+            range.selectNodeContents(
+                $(".email-line strong")
+            );
+
+            const selection =
+                window.getSelection();
+
+            selection.removeAllRanges();
+
+            selection.addRange(range);
+
+        }
+
+
+        // Restore original button text
+
+        clearTimeout(resetTimer);
+
+        resetTimer = setTimeout(() => {
+
+            button.textContent = "Copy";
+
+        }, 2400);
+
+    });
+
+}
+
+
+/* =====================================================
+   06. CONTINUOUS BACKGROUND ANIMATION ENGINE
+
+   One shared animation loop for:
+
+   - Moving particles
+   - Scroll velocity
+   - Background parallax
+   - Smooth cursor tracking
+   - Cursor lighting
+   - Rotating engineering interests
+
+   Desktop: approximately 60 FPS maximum
+   Mobile: approximately 30 FPS maximum
+===================================================== */
+
+function initAmbient() {
+
+    const canvas = $("#starfield");
+
+    const ctx = canvas.getContext("2d");
+
+    const ring = $("#cursorRing");
+
+    const glow = $("#cursorGlow");
+
+    const grid = $(".ambient-grid");
+
+    const ambientGlow = $(".ambient-glow");
+
+    const role = $("#rotatingRole");
+
+
+    const fine = window.matchMedia(
+        "(hover: hover) and (pointer: fine)"
+    );
+
+
+    // Rotating text
+
+    const roles = [
+
+        "Full-stack systems",
+
+        "Applied AI",
+
+        "Backend engineering",
+
+        "Problem solving"
+
+    ];
+
+
+    // Animation state
+
+    let paused = motion.matches;
+
+    let raf = 0;
+
+    let last = 0;
+
+    let elapsed = 0;
+
+    let roleIndex = 0;
+
+
+    // Canvas state
+
+    let width = 0;
+
+    let height = 0;
+
+    let stars = [];
+
+
+    // Scroll state
+
+    let scroll = window.scrollY;
+
+    let smoothScroll = scroll;
+
+    let velocity = 0;
+
+
+    // Cursor state
+
+    let x = 0;
+
+    let y = 0;
+
+    let cursorX = 0;
+
+    let cursorY = 0;
+
+    let pointerSeen = false;
+
+
+    /* -------------------------------------------------
+       UTILITY FUNCTIONS
+    ------------------------------------------------- */
+
+    const wrap = (number, max) => {
+
+        return (
+            (number % max) + max
+        ) % max;
+
+    };
+
+
+    // Seeded particle generator
+
+    const rand = (() => {
+
+        let seed = 83;
+
+        return () => {
+
+            seed =
+                (seed * 16807) % 2147483647;
+
+            return seed / 2147483647;
+
+        };
+
+    })();
+
+
+    /* -------------------------------------------------
+       RESPONSIVE CANVAS RESIZING
+    ------------------------------------------------- */
+
+    function resize() {
+
+        width = window.innerWidth;
+
+        height = window.innerHeight;
+
+
+        /*
+            Limit the canvas pixel count.
+
+            This prevents expensive rendering on
+            high-resolution and mobile displays.
+        */
+
+        const ratio = Math.min(
+
+            window.devicePixelRatio || 1,
+
+            1.6,
+
+            Math.sqrt(
+                3000000 /
+                Math.max(1, width * height)
+            )
+
         );
 
 
-        $$("#mobileNavigation a")
-            .forEach(
-                (link) => {
+        canvas.width =
+            Math.round(width * ratio);
 
-                    link.addEventListener(
-                        "click",
-                        () => {
-
-                            mobileButton.classList.remove(
-                                "open"
-                            );
+        canvas.height =
+            Math.round(height * ratio);
 
 
-                            mobileNavigation.classList.remove(
-                                "open"
-                            );
+        if (ctx) {
 
-
-                            mobileButton.setAttribute(
-                                "aria-expanded",
-                                "false"
-                            );
-
-
-                            document.body.style.overflow =
-                                "";
-
-                        }
-                    );
-
-                }
+            ctx.setTransform(
+                ratio,
+                0,
+                0,
+                ratio,
+                0,
+                0
             );
+
+        }
+
+
+        // Reduce particle count on mobile
+
+        const amount =
+            width < 760
+
+                ? 70
+
+                : Math.min(
+                    190,
+                    Math.round(width / 7)
+                );
+
+
+        // Generate individual star depths
+
+        stars = Array.from(
+
+            { length: amount },
+
+            () => ({
+
+                x: rand(),
+
+                y: rand(),
+
+                depth: .15 + rand() * .85,
+
+                phase: rand() * Math.PI * 2
+
+            })
+
+        );
+
+
+        if (paused || document.hidden) {
+
+            draw();
+
+        }
 
     }
 
 
-    /* ------------------------------------------
-       NAV SHRINK
-    ------------------------------------------ */
+    /* -------------------------------------------------
+       DRAW STARFIELD
+    ------------------------------------------------- */
 
-    window.addEventListener(
-        "scroll",
-        () => {
+    function draw() {
 
-            if (!nav) {
-                return;
-            }
+        if (!ctx || !width || !height) {
 
+            return;
 
-            nav.classList.toggle(
-                "scrolled",
-                window.scrollY > 30
-            );
-
-        },
-        {
-            passive:
-                true
         }
-    );
 
 
-    /* ------------------------------------------
-       ACTIVE SECTION
-    ------------------------------------------ */
-
-    const sections =
-        [
-            "about",
-            "projects",
-            "research",
-            "experience",
-            "contact"
-        ]
-        .map(
-            (id) =>
-                document.getElementById(
-                    id
-                )
-        )
-        .filter(Boolean);
-
-
-    const navLinks =
-        $$(
-            "[data-section-link]"
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
         );
 
 
-    const observer =
-        new IntersectionObserver(
-            (entries) => {
+        for (const star of stars) {
 
-                entries.forEach(
-                    (entry) => {
+            const depth = star.depth;
+
+
+            // Natural horizontal movement
+
+            const horizontalMotion =
+
+                Math.sin(
+                    elapsed * .00022 + star.phase
+                ) * 14 * depth;
+
+
+            // Mouse-controlled depth movement
+
+            const pointerX =
+
+                pointerSeen
+
+                    ? (
+                        cursorX - width / 2
+                    ) * .035 * depth
+
+                    : 0;
+
+
+            const pointerY =
+
+                pointerSeen
+
+                    ? (
+                        cursorY - height / 2
+                    ) * .035 * depth
+
+                    : 0;
+
+
+            // Particle positions
+
+            const px = wrap(
+
+                star.x * width +
+
+                horizontalMotion +
+
+                pointerX,
+
+                width
+
+            );
+
+
+            const py = wrap(
+
+                star.y * height +
+
+                elapsed * .009 * depth -
+
+                smoothScroll * .23 * depth +
+
+                pointerY,
+
+                height
+
+            );
+
+
+            // Subtle individual particle twinkling
+
+            const alpha =
+
+                (.19 + depth * .55) *
+
+                (
+                    .86 +
+
+                    .14 * Math.sin(
+                        elapsed * .0015 +
+                        star.phase
+                    )
+                );
+
+
+            // Scroll velocity creates particle trails
+
+            const length =
+
+                Math.min(
+                    22,
+                    Math.abs(velocity) * .9
+                ) * depth;
+
+
+            ctx.strokeStyle =
+
+                `rgba(141,210,224,${alpha * .65})`;
+
+
+            ctx.fillStyle =
+
+                `rgba(184,226,239,${alpha})`;
+
+
+            /* Draw scroll trail */
+
+            if (length > 1 && !paused) {
+
+                ctx.lineWidth =
+                    .75 + depth * .65;
+
+                ctx.beginPath();
+
+                ctx.moveTo(px, py);
+
+                ctx.lineTo(
+
+                    px,
+
+                    py +
+                    Math.sign(velocity) * length
+
+                );
+
+                ctx.stroke();
+
+            }
+
+
+            /* Draw star */
+
+            ctx.beginPath();
+
+            ctx.arc(
+
+                px,
+
+                py,
+
+                .45 + depth * .9,
+
+                0,
+
+                Math.PI * 2
+
+            );
+
+            ctx.fill();
+
+        }
+
+    }
+
+
+    /* -------------------------------------------------
+       MAIN ANIMATION LOOP
+    ------------------------------------------------- */
+
+    function tick(now) {
+
+        raf = 0;
+
+
+        if (paused || document.hidden) {
+
+            return;
+
+        }
+
+
+        // Frame-rate limiting
+
+        const frameInterval =
+
+            width < 760 || !fine.matches
+
+                ? 1000 / 30
+
+                : 1000 / 60;
+
+
+        if (
+            last &&
+            now - last < frameInterval - 1
+        ) {
+
+            raf = requestAnimationFrame(tick);
+
+            return;
+
+        }
+
+
+        // Prevent jumps when returning to the tab
+
+        const dt =
+
+            last
+
+                ? Math.min(60, now - last)
+
+                : 16;
+
+
+        last = now;
+
+        elapsed += dt;
+
+
+        // Frame-independent exponential smoothing
+
+        const blend =
+
+            1 - Math.exp(-dt / 95);
+
+
+        /* ---------------------------------------------
+           SCROLL VELOCITY
+        --------------------------------------------- */
+
+        const previousScroll = smoothScroll;
+
+
+        smoothScroll +=
+
+            (scroll - smoothScroll) * blend;
+
+
+        velocity +=
+
+            (
+                (smoothScroll - previousScroll) -
+
+                velocity
+
+            ) * .18;
+
+
+        /* ---------------------------------------------
+           BACKGROUND PARALLAX
+        --------------------------------------------- */
+
+        grid.style.setProperty(
+
+            "--grid-shift",
+
+            `${-(smoothScroll * .15) % 72}px`
+
+        );
+
+
+        ambientGlow.style.setProperty(
+
+            "--glow-y",
+
+            `${Math.sin(smoothScroll * .001) * 105}px`
+
+        );
+
+
+        /* ---------------------------------------------
+           CURSOR FOLLOWING
+        --------------------------------------------- */
+
+        if (pointerSeen && fine.matches) {
+
+            cursorX +=
+
+                (x - cursorX) * blend;
+
+
+            cursorY +=
+
+                (y - cursorY) * blend;
+
+
+            ring.style.transform =
+
+                `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+
+
+            glow.style.transform =
+
+                `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+
+
+            ambientGlow.style.setProperty(
+
+                "--glow-x",
+
+                `${(cursorX - width / 2) * .13}px`
+
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           AUTOMATIC ROTATING TEXT
+        --------------------------------------------- */
+
+        const next =
+
+            Math.floor(elapsed / 3200) %
+
+            roles.length;
+
+
+        if (next !== roleIndex) {
+
+            roleIndex = next;
+
+            role.textContent = roles[next];
+
+
+            if (role.animate) {
+
+                role.animate(
+
+                    [
+
+                        {
+                            opacity: 0,
+                            transform: "translateY(6px)"
+                        },
+
+                        {
+                            opacity: 1,
+                            transform: "translateY(0)"
+                        }
+
+                    ],
+
+                    {
+                        duration: 300,
+                        easing: "ease-out"
+                    }
+
+                );
+
+            }
+
+        }
+
+
+        // Render particles
+
+        draw();
+
+
+        // Request next frame
+
+        raf = requestAnimationFrame(tick);
+
+    }
+
+
+    /* -------------------------------------------------
+       START ANIMATION ENGINE
+    ------------------------------------------------- */
+
+    function start() {
+
+        if (
+
+            !raf &&
+
+            !paused &&
+
+            !document.hidden
+
+        ) {
+
+            last = 0;
+
+            raf = requestAnimationFrame(tick);
+
+        }
+
+    }
+
+
+    /* -------------------------------------------------
+       STOP ANIMATION ENGINE
+    ------------------------------------------------- */
+
+    function stop() {
+
+        if (raf) {
+
+            cancelAnimationFrame(raf);
+
+        }
+
+        raf = 0;
+
+        last = 0;
+
+    }
+
+
+    /* -------------------------------------------------
+       SYSTEM ACCESSIBILITY MANAGEMENT
+
+       No manual pause button.
+       Animations are enabled automatically unless the
+       operating system requests reduced motion.
+    ------------------------------------------------- */
+
+    function setPaused(value) {
+
+        paused = value;
+
+
+        root.classList.toggle(
+
+            "motion-paused",
+
+            paused
+
+        );
+
+
+        if (paused) {
+
+            stop();
+
+            root.classList.remove(
+                "pointer-active"
+            );
+
+            pointerSeen = false;
+
+            velocity = 0;
+
+
+            // Restore counters to their final values
+
+            $$("[data-count]").forEach(element => {
+
+                const value =
+                    Number(element.dataset.count);
+
+
+                element.textContent =
+
+                    value === 3
+
+                        ? "03"
+
+                        : element.dataset.count +
+
+                          (
+                              value === 1000
+                                  ? "+"
+                                  : ""
+                          );
+
+            });
+
+
+            draw();
+
+        } else {
+
+            root.classList.add(
+                "motion-ready"
+            );
+
+            start();
+
+        }
+
+    }
+
+
+    /* -------------------------------------------------
+       ACCESSIBILITY PREFERENCE CHANGES
+    ------------------------------------------------- */
+
+    const onPreference = () => {
+
+        setPaused(motion.matches);
+
+    };
+
+
+    if (motion.addEventListener) {
+
+        motion.addEventListener(
+            "change",
+            onPreference
+        );
+
+    } else {
+
+        motion.addListener(onPreference);
+
+    }
+
+
+    /* -------------------------------------------------
+       SCROLL EVENTS
+    ------------------------------------------------- */
+
+    window.addEventListener(
+
+        "scroll",
+
+        () => {
+
+            scroll = window.scrollY;
+
+        },
+
+        { passive: true }
+
+    );
+
+
+    /* -------------------------------------------------
+       RESIZE EVENTS
+    ------------------------------------------------- */
+
+    window.addEventListener(
+
+        "resize",
+
+        resize,
+
+        { passive: true }
+
+    );
+
+
+    /* -------------------------------------------------
+       TAB VISIBILITY OPTIMIZATION
+
+       Automatically suspends rendering when the
+       visitor switches to another browser tab.
+    ------------------------------------------------- */
+
+    document.addEventListener(
+
+        "visibilitychange",
+
+        () => {
+
+            if (document.hidden) {
+
+                stop();
+
+            } else {
+
+                start();
+
+            }
+
+        }
+
+    );
+
+
+    /* -------------------------------------------------
+       CUSTOM CURSOR EVENTS
+    ------------------------------------------------- */
+
+    document.addEventListener(
+
+        "pointermove",
+
+        event => {
+
+            if (
+
+                paused ||
+
+                !fine.matches ||
+
+                event.pointerType === "touch"
+
+            ) {
+
+                return;
+
+            }
+
+
+            x = event.clientX;
+
+            y = event.clientY;
+
+
+            // Initialize cursor without jumping
+
+            if (!pointerSeen) {
+
+                cursorX = x;
+
+                cursorY = y;
+
+                pointerSeen = true;
+
+            }
+
+
+            root.classList.add(
+                "pointer-active"
+            );
+
+
+            // Expand cursor around interactive elements
+
+            ring.classList.toggle(
+
+                "hot",
+
+                !!event.target.closest(
+                    "a, button, summary"
+                )
+
+            );
+
+        },
+
+        { passive: true }
+
+    );
+
+
+    /* Cursor compression when clicking */
+
+    document.addEventListener(
+
+        "pointerdown",
+
+        () => {
+
+            ring.classList.add("down");
+
+        },
+
+        { passive: true }
+
+    );
+
+
+    document.addEventListener(
+
+        "pointerup",
+
+        () => {
+
+            ring.classList.remove("down");
+
+        },
+
+        { passive: true }
+
+    );
+
+
+    document.addEventListener(
+
+        "pointercancel",
+
+        () => {
+
+            ring.classList.remove("down");
+
+        }
+
+    );
+
+
+    /* Hide cursor outside the browser */
+
+    document.documentElement.addEventListener(
+
+        "pointerleave",
+
+        () => {
+
+            root.classList.remove(
+                "pointer-active"
+            );
+
+            pointerSeen = false;
+
+        }
+
+    );
+
+
+    /* Hide cursor when browser loses focus */
+
+    window.addEventListener(
+
+        "blur",
+
+        () => {
+
+            root.classList.remove(
+                "pointer-active"
+            );
+
+            pointerSeen = false;
+
+        }
+
+    );
+
+
+    /* Initialize animation engine */
+
+    resize();
+
+    setPaused(paused);
+
+}
+
+
+/* =====================================================
+   07. INTERACTIVE UI EFFECTS
+===================================================== */
+
+function initInteractions() {
+
+    const fine = window.matchMedia(
+        "(hover: hover) and (pointer: fine)"
+    );
+
+
+    // Mouse effects are enabled only on compatible devices
+
+    const enabled = () => {
+
+        return (
+
+            fine.matches &&
+
+            !motion.matches &&
+
+            !root.classList.contains("motion-paused")
+
+        );
+
+    };
+
+
+    /* -------------------------------------------------
+       INTERACTIVE 3D PROFILE PORTRAIT
+    ------------------------------------------------- */
+
+    const portrait = $(".portrait-frame");
+
+
+    portrait.addEventListener(
+
+        "pointermove",
+
+        event => {
+
+            if (!enabled()) {
+
+                return;
+
+            }
+
+
+            const rect =
+
+                portrait.getBoundingClientRect();
+
+
+            const relativeX =
+
+                (
+                    event.clientX -
+
+                    rect.left -
+
+                    rect.width / 2
+
+                ) / rect.width;
+
+
+            const relativeY =
+
+                (
+                    event.clientY -
+
+                    rect.top -
+
+                    rect.height / 2
+
+                ) / rect.height;
+
+
+            portrait.style.setProperty(
+
+                "--ry",
+
+                `${relativeX * 11}deg`
+
+            );
+
+
+            portrait.style.setProperty(
+
+                "--rx",
+
+                `${-relativeY * 11}deg`
+
+            );
+
+        }
+
+    );
+
+
+    /* Restore portrait rotation */
+
+    portrait.addEventListener(
+
+        "pointerleave",
+
+        () => {
+
+            portrait.style.removeProperty("--ry");
+
+            portrait.style.removeProperty("--rx");
+
+        }
+
+    );
+
+
+    /* -------------------------------------------------
+       MAGNETIC BUTTONS
+    ------------------------------------------------- */
+
+    $$(".button").forEach(button => {
+
+        button.addEventListener(
+
+            "pointermove",
+
+            event => {
+
+                if (!enabled()) {
+
+                    return;
+
+                }
+
+
+                const rect =
+
+                    button.getBoundingClientRect();
+
+
+                const offsetX =
+
+                    event.clientX -
+
+                    rect.left -
+
+                    rect.width / 2;
+
+
+                const offsetY =
+
+                    event.clientY -
+
+                    rect.top -
+
+                    rect.height / 2;
+
+
+                button.style.setProperty(
+
+                    "--mx",
+
+                    `${offsetX * .10}px`
+
+                );
+
+
+                button.style.setProperty(
+
+                    "--my",
+
+                    `${offsetY * .12}px`
+
+                );
+
+            }
+
+        );
+
+
+        /* Restore button position */
+
+        button.addEventListener(
+
+            "pointerleave",
+
+            () => {
+
+                button.style.removeProperty("--mx");
+
+                button.style.removeProperty("--my");
+
+            }
+
+        );
+
+    });
+
+
+    /* -------------------------------------------------
+       VIEWPORT ANIMATION MANAGEMENT
+    ------------------------------------------------- */
+
+    if ("IntersectionObserver" in window) {
+
+        const view = new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(entry => {
+
+                    entry.target.classList.toggle(
+
+                        "in-view",
+
+                        entry.isIntersecting
+
+                    );
+
+                });
+
+            },
+
+            {
+                threshold: .1
+            }
+
+        );
+
+
+        $$(
+
+            ".project-visual, .research-card, .hero"
+
+        ).forEach(element => {
+
+            view.observe(element);
+
+        });
+
+
+        /* ---------------------------------------------
+           ANIMATED COUNTERS
+        --------------------------------------------- */
+
+        const counts = new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(entry => {
+
+                    if (!entry.isIntersecting) {
+
+                        return;
+
+                    }
+
+
+                    // Counters run only once
+
+                    counts.unobserve(entry.target);
+
+
+                    const element = entry.target;
+
+                    const value =
+
+                        Number(element.dataset.count);
+
+
+                    const final =
+
+                        element.textContent;
+
+
+                    if (
+
+                        motion.matches ||
+
+                        root.classList.contains(
+                            "motion-paused"
+                        )
+
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const start = performance.now();
+
+
+                    function animate(now) {
 
                         if (
-                            !entry.isIntersecting
+
+                            root.classList.contains(
+                                "motion-paused"
+                            ) ||
+
+                            motion.matches ||
+
+                            document.hidden
+
                         ) {
+
+                            element.textContent = final;
 
                             return;
 
                         }
 
 
-                        navLinks.forEach(
-                            (link) => {
+                        const t = Math.min(
 
-                                const active =
-                                    link.getAttribute(
-                                        "href"
-                                    ) ===
-                                    `#${entry.target.id}`;
+                            1,
 
+                            (now - start) / 900
 
-                                link.classList.toggle(
-                                    "active",
-                                    active
-                                );
-
-                            }
                         );
 
-                    }
-                );
 
-            },
-            {
-                threshold:
-                    .45
-            }
-        );
+                        const number = Math.round(
 
+                            value *
 
-    sections.forEach(
-        (section) => {
+                            (
+                                1 -
+                                Math.pow(1 - t, 3)
+                            )
 
-            observer.observe(
-                section
-            );
-
-        }
-    );
-
-}
+                        );
 
 
-/* =====================================================
-   BOTTOM SCROLL DOCK
-===================================================== */
+                        element.textContent =
 
-function initScrollDock() {
+                            t === 1
 
-    const dock =
-        document.getElementById(
-            "scrollDock"
-        );
+                                ? final
 
+                                : (
 
-    const progress =
-        document.getElementById(
-            "scrollDockProgress"
-        );
+                                    value === 3
 
+                                        ? String(number)
+                                            .padStart(2, "0")
 
-    const glow =
-        document.getElementById(
-            "scrollDockGlow"
-        );
+                                        : String(number)
 
+                                ) +
 
-    const sectionText =
-        document.getElementById(
-            "scrollDockSection"
-        );
+                                (
+                                    value === 1000
+                                        ? "+"
+                                        : ""
+                                );
 
 
-    if (
-        !dock ||
-        !progress
-    ) {
-        return;
-    }
+                        if (t < 1) {
 
-
-    const sectionNames = {
-
-        home:
-            "HOME",
-
-        about:
-            "ABOUT",
-
-        projects:
-            "MISSIONS",
-
-        research:
-            "RESEARCH",
-
-        experience:
-            "MISSION LOG",
-
-        contact:
-            "CONTACT"
-
-    };
-
-
-    let ticking =
-        false;
-
-
-    function updateScrollDock() {
-
-        if (
-            ticking
-        ) {
-            return;
-        }
-
-
-        ticking =
-            true;
-
-
-        requestAnimationFrame(
-            () => {
-
-                const scrollTop =
-                    window.scrollY ||
-                    0;
-
-
-                const scrollable =
-                    Math.max(
-                        document.documentElement
-                            .scrollHeight -
-                        window.innerHeight,
-                        1
-                    );
-
-
-                const progressValue =
-                    Math.min(
-                        1,
-                        Math.max(
-                            0,
-                            scrollTop /
-                            scrollable
-                        )
-                    );
-
-
-                /*
-                 * The line grows outward from the
-                 * center instead of behaving like a
-                 * conventional percentage progress bar.
-                 */
-
-                dock.style.setProperty(
-                    "--scroll-progress",
-                    progressValue.toFixed(4)
-                );
-
-
-                dock.classList.toggle(
-                    "has-scroll",
-                    progressValue > .015
-                );
-
-
-                dock.classList.toggle(
-                    "near-end",
-                    progressValue > .96
-                );
-
-
-                if (glow) {
-                    glow.style.opacity = String(.22 + progressValue * .78);
-                    glow.style.transform = `translate(-50%, -50%) scale(${.55 + progressValue * 1.35})`;
-                    glow.style.left = `${progressValue * 100}%`;
-                }
-
-
-                /*
-                 * Current visible section
-                 */
-
-                const sections =
-                    $$(
-                        "main section"
-                    );
-
-
-                let currentSection =
-                    "home";
-
-
-                let smallestDistance =
-                    Infinity;
-
-
-                sections.forEach(
-                    (section) => {
-
-                        const rect =
-                            section.getBoundingClientRect();
-
-
-                        const distance =
-                            Math.abs(
-                                rect.top -
-                                window.innerHeight *
-                                .28
+                            requestAnimationFrame(
+                                animate
                             );
-
-
-                        if (
-                            distance <
-                            smallestDistance
-                        ) {
-
-                            smallestDistance =
-                                distance;
-
-
-                            currentSection =
-                                section.id;
 
                         }
 
                     }
-                );
 
 
-                if (
-                    sectionText
-                ) {
+                    requestAnimationFrame(animate);
 
-                    sectionText.textContent =
-                        sectionNames[
-                            currentSection
-                        ] ||
-                        currentSection.toUpperCase();
+                });
 
-                }
+            },
 
-
-                ticking =
-                    false;
-
+            {
+                threshold: .5
             }
+
         );
 
+
+        $$("[data-count]").forEach(element => {
+
+            counts.observe(element);
+
+        });
+
     }
-
-
-    window.addEventListener(
-        "scroll",
-        updateScrollDock,
-        {
-            passive:
-                true
-        }
-    );
-
-
-    window.addEventListener(
-        "resize",
-        updateScrollDock
-    );
-
-
-    updateScrollDock();
 
 }
 
 
 /* =====================================================
-   CURSOR-REACTIVE STAR LAYERS
+   08. AUTOMATIC PROJECT DEMONSTRATIONS
+
+   No buttons.
+   No manual interaction required.
+   No backend requests.
+
+   All values are explicitly illustrative sample data.
+
+   Conscia: updates every 3.2 seconds.
+   SocialDash: updates every 3.8 seconds.
+   Blockchain: advances every 1 second.
 ===================================================== */
 
-function initParallaxStars() {
+function initProjectDemos() {
 
-    const container =
-        document.getElementById(
-            "parallax-stars"
-        );
+    /* -------------------------------------------------
+       CONSCIA SAMPLE REVIEWS
+    ------------------------------------------------- */
 
+    const samples = [
 
-    if (
-        !container
-    ) {
-        return;
-    }
+        {
 
+            text: "“Less plastic, durable packaging.”",
 
-    const reduced =
-        prefersReducedMotion;
+            scores: [82, 65, 75, 58]
 
+        },
 
-    const mobile =
-        window.innerWidth < 700;
+        {
 
+            text: "“Too much packaging and waste.”",
 
-    const count =
-        mobile
-            ? 20
-            : 40;
+            scores: [28, 58, 72, 55]
 
+        },
 
-    container.innerHTML =
-        "";
+        {
 
+            text: "“Recyclable box, made to last.”",
 
-    const stars =
-        [];
+            scores: [91, 73, 68, 72]
+
+        }
+
+    ];
 
 
-    let mouseX =
-        0;
+    /* -------------------------------------------------
+       SOCIALDASH SAMPLE CHART DATA
+    ------------------------------------------------- */
+
+    const series = [
+
+        [
+
+            121, 112, 117, 90, 98,
+
+            70, 80, 55, 64, 30,
+
+            42, 20, 5
+
+        ],
+
+        [
+
+            130, 107, 111, 97, 83,
+
+            92, 63, 69, 47, 38,
+
+            45, 15, 9
+
+        ],
+
+        [
+
+            125, 118, 95, 105, 84,
+
+            68, 74, 53, 42, 55,
+
+            29, 20, 7
+
+        ]
+
+    ];
 
 
-    let mouseY =
-        0;
+    /* -------------------------------------------------
+       CACHE DOM ELEMENTS
+
+       Avoid querying the DOM every animation frame.
+    ------------------------------------------------- */
+
+    const conscia = $(".visual-conscia");
+
+    const social = $(".visual-social");
+
+    const chain = $(".visual-chain");
 
 
-    let smoothX =
-        0;
+    const review = $(
+
+        ".diagram-review p",
+
+        conscia
+
+    );
 
 
-    let smoothY =
-        0;
+    const bars = $$(
+
+        ".score-row i",
+
+        conscia
+
+    );
 
 
-    let scrollTarget =
-        0;
+    const line = $(
+
+        ".chart-line",
+
+        social
+
+    );
 
 
-    let smoothScroll =
-        0;
+    const area = $(
+
+        'path[fill="url(#chartFill)"]',
+
+        social
+
+    );
 
 
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
+    const dot = $(
 
-        const star =
-            document.createElement(
-                "span"
+        ".chart circle",
+
+        social
+
+    );
+
+
+    const nodes = $$(
+
+        ".chain-node",
+
+        chain
+
+    );
+
+
+    const hash = $(
+
+        ".hash-line span:last-child",
+
+        chain
+
+    );
+
+
+    // Animation indexes
+
+    let sampleIndex = 0;
+
+    let chartIndex = 0;
+
+    let stage = 0;
+
+
+    /* -------------------------------------------------
+       AUTOMATIC CONSCIA ANALYSIS
+    ------------------------------------------------- */
+
+    function updateConscia() {
+
+        sampleIndex =
+
+            (sampleIndex + 1) %
+
+            samples.length;
+
+
+        const sample = samples[sampleIndex];
+
+
+        // Replace sample review
+
+        review.textContent = sample.text;
+
+
+        /*
+            Update using CSS scaleX transforms.
+
+            Avoids recalculating the layout when
+            the scoring bars change.
+        */
+
+        bars.forEach((bar, index) => {
+
+            bar.style.setProperty(
+
+                "--bar",
+
+                sample.scores[index] / 100
+
             );
-
-
-        star.className =
-            "parallax-star";
-
-
-        const depth =
-            .15 +
-            Math.random() *
-            .95;
-
-
-        const size =
-            Math.random() < .88
-                ? (
-                    .8 +
-                    Math.random() *
-                    1.7
-                )
-                : (
-                    2.1 +
-                    Math.random() *
-                    2.1
-                );
-
-
-        const x =
-            Math.random() *
-            100;
-
-
-        const y =
-            Math.random() *
-            100;
-
-
-        const drift =
-            .08 +
-            Math.random() *
-            .20;
-
-
-        const twinkle =
-            1.6 +
-            Math.random() *
-            4.5;
-
-
-        const delay =
-            Math.random() *
-            -5;
-
-
-        const hue =
-            Math.random() > .78
-                ? "cyan"
-                : "violet";
-
-
-        star.style.setProperty(
-            "--star-size",
-            `${size}px`
-        );
-
-
-        star.style.setProperty(
-            "--star-x",
-            `${x}vw`
-        );
-
-
-        star.style.setProperty(
-            "--star-y",
-            `${y}vh`
-        );
-
-
-        star.style.setProperty(
-            "--star-depth",
-            depth.toFixed(3)
-        );
-
-
-        star.style.setProperty(
-            "--star-drift",
-            `${drift}s`
-        );
-
-
-        star.style.setProperty(
-            "--star-twinkle",
-            `${twinkle}s`
-        );
-
-
-        star.style.setProperty(
-            "--star-delay",
-            `${delay}s`
-        );
-
-
-        star.dataset.hue =
-            hue;
-
-
-        container.appendChild(
-            star
-        );
-
-
-        stars.push({
-
-            el:
-                star,
-
-            x:
-                x,
-
-            y:
-                y,
-
-            depth:
-                depth,
-
-            drift:
-                drift,
-
-            phase:
-                Math.random() *
-                Math.PI *
-                2,
-
-            twinkle:
-                .2 +
-                Math.random() *
-                1.1
 
         });
 
     }
 
 
-    if (
-        !isTouchDevice
-    ) {
+    /* -------------------------------------------------
+       AUTOMATIC SOCIALDASH CHART
+    ------------------------------------------------- */
 
-        document.addEventListener(
-            "mousemove",
-            (event) => {
+    function updateSocial() {
 
-                mouseX =
-                    (
-                        event.clientX /
-                        window.innerWidth
-                    ) -
-                    .5;
+        chartIndex =
+
+            (chartIndex + 1) %
+
+            series.length;
 
 
-                mouseY =
-                    (
-                        event.clientY /
-                        window.innerHeight
-                    ) -
-                    .5;
+        const values = series[chartIndex];
 
-            },
-            {
-                passive:
-                    true
-            }
+
+        // Generate the updated SVG path
+
+        const path =
+
+            "M" +
+
+            values.map((value, index) => {
+
+                return (
+
+                    `${Math.round(index * 440 / 12)} ${value}`
+
+                );
+
+            }).join(" ");
+
+
+        // Update chart line
+
+        line.setAttribute(
+
+            "d",
+
+            path
+
         );
 
-    }
+
+        // Update gradient area
+
+        area.setAttribute(
+
+            "d",
+
+            path + "V145H0Z"
+
+        );
 
 
-    window.addEventListener(
-        "scroll",
-        () => {
+        // Update the final data point
 
-            scrollTarget =
-                window.scrollY;
+        dot.setAttribute(
 
-        },
-        {
-            passive:
-                true
-        }
-    );
+            "cy",
+
+            values[values.length - 1]
+
+        );
 
 
-    const clock =
-        performance.now();
+        /* Draw the new chart automatically */
+
+        if (line.animate) {
+
+            const length = line.getTotalLength();
 
 
-    function render(
-        now
-    ) {
+            line.animate(
 
-        smoothX +=
-            (
-                mouseX -
-                smoothX
-            ) * .035;
+                [
 
+                    {
 
-        smoothY +=
-            (
-                mouseY -
-                smoothY
-            ) * .035;
+                        strokeDasharray:
 
-        // Increased easing for snappier, smoother scroll tracking on DOM stars
-        smoothScroll +=
-            (
-                scrollTarget -
-                smoothScroll
-            ) * .08;
+                            `${length} ${length}`,
 
+                        strokeDashoffset:
 
-        const time =
-            (
-                now -
-                clock
-            ) * .001;
+                            length
 
+                    },
 
-        stars.forEach(
-            (star) => {
+                    {
 
-                const cursorX =
-                    smoothX *
-                    star.depth *
-                    26;
+                        strokeDasharray:
 
+                            `${length} ${length}`,
 
-                const cursorY =
-                    smoothY *
-                    star.depth *
-                    20;
+                        strokeDashoffset:
 
-
-                const orbitalX =
-                    Math.sin(
-                        time *
-                        star.drift +
-                        star.phase
-                    ) *
-                    (
-                        2 +
-                        star.depth *
-                        3
-                    );
-
-
-                const orbitalY =
-                    Math.cos(
-                        time *
-                        star.drift *
-                        .7 +
-                        star.phase
-                    ) *
-                    (
-                        1.5 +
-                        star.depth *
-                        2
-                    );
-
-
-                const scrollY =
-                    -(
-                        smoothScroll *
-                        (
-                            .006 +
-                            star.depth *
-                            .012
-                        )
-                    );
-
-
-                star.el.style.transform =
-                    `
-                        translate3d(
-                            ${
-                                cursorX +
-                                orbitalX
-                            }px,
-                            ${
-                                cursorY +
-                                orbitalY +
-                                scrollY
-                            }px,
                             0
-                        )
-                    `;
 
-            }
-        );
+                    }
 
+                ],
 
-        if (
-            !reduced
-        ) {
+                {
 
-            requestAnimationFrame(
-                render
+                    duration: 950,
+
+                    easing: "ease-out"
+
+                }
+
             );
 
         }
@@ -1677,525 +2248,383 @@ function initParallaxStars() {
     }
 
 
-    if (
-        reduced
-    ) {
+    /* -------------------------------------------------
+       AUTOMATIC BLOCKCHAIN VERIFICATION
+    ------------------------------------------------- */
 
-        stars.forEach(
-            (star) => {
+    function updateChain() {
 
-                star.el.style.transform =
-                    "none";
+        // Five-stage repeating verification sequence
+
+        stage =
+
+            (stage + 1) % 5;
+
+
+        nodes.forEach((node, index) => {
+
+            // Mark completed stages
+
+            node.classList.toggle(
+
+                "verified",
+
+                stage > index
+
+            );
+
+
+            // Highlight current processing stage
+
+            node.classList.toggle(
+
+                "processing",
+
+                stage === index + 1
+
+            );
+
+        });
+
+
+        const states = [
+
+            "Sample hash pending",
+
+            "Sample document hashed",
+
+            "Sample record checked",
+
+            "✓ Sample hash match",
+
+            "✓ Sample hash match"
+
+        ];
+
+
+        hash.textContent = states[stage];
+
+    }
+
+
+    /* =================================================
+       09. PERFORMANCE-OPTIMIZED PROJECT SCHEDULER
+
+       Each project uses only one active timeout.
+
+       Animations automatically stop when:
+
+       - The project is outside the viewport.
+       - The browser tab is hidden.
+       - Reduced motion is requested by the system.
+
+       They resume automatically when visible.
+    ================================================= */
+
+    const jobs = new Map([
+
+        [
+
+            conscia,
+
+            {
+
+                run: updateConscia,
+
+                delay: 3200,
+
+                timer: 0,
+
+                visible: false
 
             }
+
+        ],
+
+        [
+
+            social,
+
+            {
+
+                run: updateSocial,
+
+                delay: 3800,
+
+                timer: 0,
+
+                visible: false
+
+            }
+
+        ],
+
+        [
+
+            chain,
+
+            {
+
+                run: updateChain,
+
+                delay: 1000,
+
+                timer: 0,
+
+                visible: false
+
+            }
+
+        ]
+
+    ]);
+
+
+    /* Check whether a project should animate */
+
+    const canRun = job => {
+
+        return (
+
+            job.visible &&
+
+            !document.hidden &&
+
+            !motion.matches
+
         );
-
-    }
-    else {
-
-        requestAnimationFrame(
-            render
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CASE STUDY MODAL
-===================================================== */
-
-function initCaseStudies() {
-
-
-    const modal =
-        document.getElementById(
-            "caseModal"
-        );
-
-
-    const close =
-        document.getElementById(
-            "caseModalClose"
-        );
-
-
-    const backdrop =
-        document.getElementById(
-            "caseModalBackdrop"
-        );
-
-
-    const modalNumber =
-        document.getElementById(
-            "modalNumber"
-        );
-
-
-    const modalTitle =
-        document.getElementById(
-            "modalTitle"
-        );
-
-
-    const modalSummary =
-        document.getElementById(
-            "modalSummary"
-        );
-
-
-    const modalPoints =
-        document.getElementById(
-            "modalPoints"
-        );
-
-
-    const modalTags =
-        document.getElementById(
-            "modalTags"
-        );
-
-
-    const modalRole =
-        document.getElementById(
-            "modalRole"
-        );
-
-
-    if (
-        !modal
-    ) {
-        return;
-    }
-
-
-    const caseStudies = {
-
-        conscia: {
-
-            number:
-                "01",
-
-            title:
-                "Conscia — Ethical Shopping AI",
-
-            summary:
-                "An end-to-end NLP and responsible-AI system that maps product-review language to four ethical dimensions and makes predictions interpretable.",
-
-            points: [
-
-                "Teacher model: lexicon-based weak supervision generated initial labels for Environment, Labor Rights, Animal Welfare and Corporate Governance.",
-
-                "Student model: TensorFlow/Keras neural network trained using TF-IDF features with dense layers, dropout and sigmoid outputs.",
-
-                "Explainability: LIME identifies influential words behind model predictions.",
-
-                "Backend: Flask exposes prediction and explanation endpoints.",
-
-                "Gemini API converts model outputs and explanation signals into natural-language summaries.",
-
-                "The research paper reports 91.5% classification accuracy."
-
-            ],
-
-            tags: [
-
-                "TensorFlow",
-                "Keras",
-                "TF-IDF",
-                "LIME",
-                "Flask",
-                "Gemini API"
-
-            ],
-
-            role:
-                "End-to-end project covering NLP preprocessing, model training, explainability, backend integration and product interface."
-
-        },
-
-
-        blockchain: {
-
-            number:
-                "02",
-
-            title:
-                "Blockchain Certificate Verification",
-
-            summary:
-                "A decentralized document verification workflow designed to make credential integrity independently checkable.",
-
-            points: [
-
-                "Ethereum smart contracts store document hashes on-chain.",
-
-                "IPFS stores encrypted documents off-chain while blockchain records preserve the integrity reference.",
-
-                "Web3.js and MetaMask provide wallet-connected interactions.",
-
-                "Hash comparison validates uploaded documents against blockchain-stored references.",
-
-                "The architecture reduces dependence on a single central verification authority."
-
-            ],
-
-            tags: [
-
-                "Solidity",
-                "Ethereum",
-                "IPFS",
-                "Web3.js",
-                "Node.js",
-                "MetaMask"
-
-            ],
-
-            role:
-                "Full-stack blockchain project covering smart contracts, storage architecture, verification logic and Web3 integration."
-
-        },
-
-
-        socialdash: {
-
-            number:
-                "03",
-
-            title:
-                "SocialDash — Real-Time Analytics",
-
-            summary:
-                "A full-stack analytics platform built around live growth signals, session velocity and milestone-based progress tracking.",
-
-            points: [
-
-                "React frontend renders analytics and dynamic progress visualizations.",
-
-                "FastAPI powers the backend API and delta-based update logic.",
-
-                "MongoDB provides analytics persistence.",
-
-                "Firebase Authentication provides secure user access.",
-
-                "The system emphasizes live metrics rather than static reporting."
-
-            ],
-
-            tags: [
-
-                "React",
-                "FastAPI",
-                "MongoDB",
-                "Firebase",
-                "REST API",
-                "Real-Time"
-
-            ],
-
-            role:
-                "Full-stack project covering frontend development, APIs, authentication, persistence and analytics visualization."
-
-        }
 
     };
 
 
-    function openModal(
-        key
-    ) {
+    /* -------------------------------------------------
+       PROJECT ANIMATION SCHEDULER
+    ------------------------------------------------- */
 
-        const data =
-            caseStudies[key];
+    function sync(job) {
 
+        if (!canRun(job)) {
 
-        if (
-            !data
-        ) {
+            clearTimeout(job.timer);
+
+            job.timer = 0;
+
             return;
+
+        }
+
+
+        // Prevent duplicate animation loops
+
+        if (job.timer) {
+
+            return;
+
         }
 
 
-        modalNumber.textContent =
-            data.number;
+        // Schedule next automatic update
+
+        job.timer = setTimeout(() => {
+
+            job.timer = 0;
 
 
-        modalTitle.textContent =
-            data.title;
+            if (!canRun(job)) {
 
-
-        modalSummary.textContent =
-            data.summary;
-
-
-        modalPoints.innerHTML =
-            data.points
-                .map(
-                    (point) => `
-                        <div class="modal-point">
-                            ${point}
-                        </div>
-                    `
-                )
-                .join("");
-
-
-        modalTags.innerHTML =
-            data.tags
-                .map(
-                    (tag) => `
-                        <span>
-                            ${tag}
-                        </span>
-                    `
-                )
-                .join("");
-
-
-        modalRole.textContent =
-            data.role;
-
-
-        modal.classList.add(
-            "open"
-        );
-
-
-        modal.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
-
-        document.body.classList.add(
-            "modal-open"
-        );
-
-    }
-
-
-    function closeModal() {
-
-        modal.classList.remove(
-            "open"
-        );
-
-
-        modal.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-
-        document.body.classList.remove(
-            "modal-open"
-        );
-
-    }
-
-
-    $$(
-        "[data-case-study]"
-    )
-    .forEach(
-        (button) => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    openModal(
-                        button.dataset.caseStudy
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    close?.addEventListener(
-        "click",
-        closeModal
-    );
-
-
-    backdrop?.addEventListener(
-        "click",
-        closeModal
-    );
-
-
-    document.addEventListener(
-        "keydown",
-        (event) => {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeModal();
+                return;
 
             }
 
-        }
-    );
 
-}
+            // Execute next project animation
 
-
-/* =====================================================
-   SMOOTH INTERNAL LINKS
-===================================================== */
-
-function initSmoothLinks() {
+            job.run();
 
 
-    $$(
-        'a[href^="#"]'
-    )
-    .forEach(
-        (link) => {
+            // Repeat automatically
 
-            link.addEventListener(
-                "click",
-                (event) => {
+            sync(job);
 
-                    const selector =
-                        link.getAttribute(
-                            "href"
-                        );
+        }, job.delay);
 
-
-                    if (
-                        !selector ||
-                        selector === "#"
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const target =
-                        document.querySelector(
-                            selector
-                        );
-
-
-                    if (
-                        !target
-                    ) {
-                        return;
-                    }
-
-
-                    event.preventDefault();
-
-
-                    target.scrollIntoView({
-
-                        behavior:
-                            prefersReducedMotion
-                                ? "auto"
-                                : "smooth",
-
-                        block:
-                            "start"
-
-                    });
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   HERO ORBIT PARALLAX
-===================================================== */
-
-function initHeroParallax() {
-    if (isTouchDevice || prefersReducedMotion) {
-        return;
     }
 
-    const hero = document.querySelector(".hero");
-    const orbit = document.querySelector(".hero-orbit-system");
-    const interactiveLayers = document.querySelectorAll(".orbit-label, .satellite");
 
-    if (!hero || !orbit) {
-        return;
-    }
+    /* -------------------------------------------------
+       PROJECT VISIBILITY OBSERVER
+    ------------------------------------------------- */
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let ticking = false;
+    if ("IntersectionObserver" in window) {
 
-    hero.addEventListener("mousemove", (event) => {
-        const rect = hero.getBoundingClientRect();
-        mouseX = (event.clientX - rect.left) / rect.width - 0.5;
-        mouseY = (event.clientY - rect.top) / rect.height - 0.5;
+        const observer = new IntersectionObserver(
 
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                orbit.style.transform = `translate3d(${mouseX * 20}px, ${mouseY * 15}px, 0)`;
-                interactiveLayers.forEach((layer) => {
-                    layer.style.transform = `translate3d(${mouseX * 45}px, ${mouseY * 45}px, 0)`;
+            entries => {
+
+                entries.forEach(entry => {
+
+                    const job = jobs.get(entry.target);
+
+
+                    job.visible = entry.isIntersecting;
+
+
+                    sync(job);
+
                 });
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
 
-    hero.addEventListener("mouseleave", () => {
-        requestAnimationFrame(() => {
-            orbit.style.transform = "";
-            interactiveLayers.forEach((layer) => {
-                layer.style.transform = "";
-            });
+            },
+
+            {
+
+                threshold: .05
+
+            }
+
+        );
+
+
+        jobs.forEach((job, panel) => {
+
+            observer.observe(panel);
+
         });
-    });
+
+    } else {
+
+        /* Fallback for older browsers */
+
+        let scheduled = false;
+
+
+        const check = () => {
+
+            scheduled = false;
+
+
+            jobs.forEach((job, panel) => {
+
+                const rect =
+
+                    panel.getBoundingClientRect();
+
+
+                job.visible =
+
+                    rect.bottom > 0 &&
+
+                    rect.top < window.innerHeight;
+
+
+                sync(job);
+
+            });
+
+        };
+
+
+        const schedule = () => {
+
+            if (!scheduled) {
+
+                scheduled = true;
+
+                requestAnimationFrame(check);
+
+            }
+
+        };
+
+
+        window.addEventListener(
+
+            "scroll",
+
+            schedule,
+
+            { passive: true }
+
+        );
+
+
+        window.addEventListener(
+
+            "resize",
+
+            schedule,
+
+            { passive: true }
+
+        );
+
+
+        check();
+
+    }
+
+
+    /* -------------------------------------------------
+       AUTOMATIC SUSPENSION AND RESUMPTION
+    ------------------------------------------------- */
+
+    const syncAll = () => {
+
+        jobs.forEach(sync);
+
+    };
+
+
+    document.addEventListener(
+
+        "visibilitychange",
+
+        syncAll
+
+    );
+
+
+    if (motion.addEventListener) {
+
+        motion.addEventListener(
+
+            "change",
+
+            syncAll
+
+        );
+
+    } else {
+
+        motion.addListener(syncAll);
+
+    }
+
 }
 
 
 /* =====================================================
-   INITIALIZATION
+   10. INITIALIZE ALL WEBSITE FEATURES
 ===================================================== */
 
-function initializePortfolio() {
+initNavigation();
 
-    initSpaceBackground();
+initScrollState();
 
-    initParallaxStars();
+initMotion();
 
-    initCursor();
+initContact();
 
-    initNavigation();
+initAmbient();
 
-    initScrollDock();
+initInteractions();
 
-    initRevealAnimations();
-
-    initMagneticElements();
-
-    initCaseStudies();
-
-    initSmoothLinks();
-
-    initHeroParallax();
-
-}
+initProjectDemos();
 
 
-window.addEventListener(
-    "DOMContentLoaded",
-    initializePortfolio
-);
+/* =====================================================
+   11. AUTOMATIC FOOTER YEAR
+===================================================== */
+
+$("#year").textContent =
+
+    String(new Date().getFullYear());
